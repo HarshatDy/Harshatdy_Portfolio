@@ -111,13 +111,15 @@ function PortfolioCard({
       }}
       whileHover={{
         scale: 1.05,
+        y: -15, // Pop up effect
         zIndex: 10,
+        boxShadow: "0 25px 50px -12px rgba(255, 128, 0, 0.15), 0 10px 20px -5px rgba(0, 0, 0, 0.3)",
         transition: {
           duration: 0.4,
           ease: [0.25, 0.1, 0.25, 1.0],
         },
       }}
-      className="group relative aspect-square overflow-hidden rounded-xl"
+      className="portfolio-card group relative aspect-square overflow-hidden rounded-xl shadow-xl"
     >
       <motion.div
         className="absolute inset-0 bg-cover bg-center"

@@ -3,8 +3,9 @@
 import { useState, useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import { ChevronUp, ChevronDown } from "lucide-react"
+import TimelineModal from "./timeline-modal"
 
-interface TimelineItem {
+export interface TimelineItem {
   id: number
   year: string
   title: string
@@ -49,6 +50,8 @@ const timelineData: TimelineItem[] = [
 
 export default function Timeline() {
   const [items, setItems] = useState(timelineData)
+  const [selectedItem, setSelectedItem] = useState<TimelineItem | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const sectionRef = useRef(null)
   const isInView = useInView(sectionRef, { once: false, amount: 0.2 })
 
@@ -68,6 +71,19 @@ export default function Timeline() {
       if (lastItem) newItems.unshift(lastItem)
       return newItems
     })
+  }
+
+  const openModal = (item: TimelineItem) => {
+    setSelectedItem(item)
+    setIsModalOpen(true)
+    // Prevent body scrolling when modal is open
+    document.body.style.overflow = "hidden"
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    // Re-enable body scrolling when modal is closed
+    document.body.style.overflow = "auto"
   }
 
   return (
@@ -93,7 +109,13 @@ export default function Timeline() {
 
           <div className="space-y-8">
             {items.map((item, index) => (
-              <TimelineCard key={item.id} item={item} index={index} isInView={isInView} />
+              <TimelineCard 
+                key={item.id} 
+                item={item} 
+                index={index} 
+                isInView={isInView}
+                onClick={() => openModal(item)}
+              />
             ))}
           </div>
 
@@ -106,6 +128,13 @@ export default function Timeline() {
           </button>
         </div>
       </div>
+
+      {/* Modal */}
+      <TimelineModal 
+        item={selectedItem} 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+      />
     </section>
   )
 }
@@ -114,10 +143,12 @@ function TimelineCard({
   item,
   index,
   isInView,
+  onClick,
 }: {
   item: TimelineItem
   index: number
   isInView: boolean
+  onClick: () => void
 }) {
   return (
     <motion.div
@@ -126,16 +157,19 @@ function TimelineCard({
       transition={{
         duration: 0.8,
         delay: index * 0.15,
-        ease: [0.25, 0.1, 0.25, 1.0], // Cubic bezier for smoother motion
+        ease: [0.25, 0.1, 0.25, 1.0],
       }}
       whileHover={{
         scale: 1.03,
+        y: -10,
+        boxShadow: "0 20px 25px -5px rgba(255, 128, 0, 0.2), 0 10px 10px -5px rgba(255, 128, 0, 0.1)",
         transition: {
           duration: 0.4,
           ease: [0.25, 0.1, 0.25, 1.0],
         },
       }}
-      className="group relative cursor-pointer overflow-hidden rounded-xl bg-zinc-800 transition-all"
+      className="timeline-card group relative cursor-pointer overflow-hidden rounded-xl bg-zinc-800 transition-all shadow-[0_4px_8px_0_rgba(255,128,0,0.1)]"
+      onClick={onClick}
     >
       <motion.div
         className="absolute -inset-1 rounded-xl bg-gradient-to-r from-[#FF8000]/0 via-[#FF8000]/30 to-[#FF8000]/0 opacity-0 blur-xl"

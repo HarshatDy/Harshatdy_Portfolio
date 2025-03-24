@@ -24,6 +24,17 @@ export default function TimelineModal({ item, isOpen, onClose }: TimelineModalPr
   }, [isOpen])
 
   if (!item) return null
+  
+  // Extract detailed info or use defaults
+  const metrics = item.detailedInfo?.metrics || [
+    { value: "85%", label: "Efficiency" },
+    { value: "12+", label: "Team Members" },
+    { value: "6 mo", label: "Time Frame" },
+  ];
+  
+  const fullDescription = item.detailedInfo?.fullDescription;
+  const achievements = item.detailedInfo?.achievements;
+  const links = item.detailedInfo?.links;
 
   return (
     <AnimatePresence>
@@ -87,38 +98,64 @@ export default function TimelineModal({ item, isOpen, onClose }: TimelineModalPr
 
                   {/* Infographics */}
                   <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-3">
-                    <div className="rounded-lg bg-zinc-800 p-4 text-center">
-                      <span className="block text-2xl font-bold text-[#FF8000]">85%</span>
-                      <span className="text-sm text-zinc-400">Efficiency</span>
-                    </div>
-                    <div className="rounded-lg bg-zinc-800 p-4 text-center">
-                      <span className="block text-2xl font-bold text-[#FF8000]">12+</span>
-                      <span className="text-sm text-zinc-400">Team Members</span>
-                    </div>
-                    <div className="rounded-lg bg-zinc-800 p-4 text-center">
-                      <span className="block text-2xl font-bold text-[#FF8000]">6 mo</span>
-                      <span className="text-sm text-zinc-400">Time Frame</span>
-                    </div>
+                    {metrics.map((metric, index) => (
+                      <div key={index} className="rounded-lg bg-zinc-800 p-4 text-center">
+                        <span className="block text-2xl font-bold text-[#FF8000]">{metric.value}</span>
+                        <span className="text-sm text-zinc-400">{metric.label}</span>
+                      </div>
+                    ))}
                   </div>
 
                   {/* Description */}
                   <div className="prose prose-invert max-w-none">
                     <p className="text-lg text-zinc-300">{item.description}</p>
-                    <p className="mt-4 text-zinc-400">
-                      This project involved extensive collaboration across multiple departments,
-                      implementing cutting-edge technologies and methodologies to achieve outstanding results.
-                      The solutions developed continue to provide significant value and have become a
-                      benchmark for similar initiatives in the industry.
-                    </p>
+                    
+                    {fullDescription && (
+                      <p className="mt-4 text-zinc-400">{fullDescription}</p>
+                    )}
+                    
+                    {!fullDescription && (
+                      <p className="mt-4 text-zinc-400">
+                        This project involved extensive collaboration across multiple departments,
+                        implementing cutting-edge technologies and methodologies to achieve outstanding results.
+                        The solutions developed continue to provide significant value and have become a
+                        benchmark for similar initiatives in the industry.
+                      </p>
+                    )}
+                    
                     <div className="mt-6">
                       <h3 className="text-lg font-semibold">Key Achievements:</h3>
                       <ul className="ml-5 mt-2 list-disc text-zinc-400">
-                        <li>Successfully delivered project under budget and ahead of schedule</li>
-                        <li>Implemented innovative solutions that exceeded client expectations</li>
-                        <li>Developed new methodologies that have been adopted company-wide</li>
-                        <li>Received industry recognition for excellence in execution</li>
+                        {achievements ? (
+                          achievements.map((achievement, index) => (
+                            <li key={index}>{achievement}</li>
+                          ))
+                        ) : (
+                          <>
+                            <li>Successfully delivered project under budget and ahead of schedule</li>
+                            <li>Implemented innovative solutions that exceeded client expectations</li>
+                            <li>Developed new methodologies that have been adopted company-wide</li>
+                            <li>Received industry recognition for excellence in execution</li>
+                          </>
+                        )}
                       </ul>
                     </div>
+                    
+                    {links && links.length > 0 && (
+                      <div className="mt-6">
+                        {links.map((link, index) => (
+                          <a 
+                            key={index}
+                            href={link.url} 
+                            className="inline-block text-[#FF8000] hover:underline"
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            {link.text}
+                          </a>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

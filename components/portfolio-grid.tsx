@@ -9,50 +9,57 @@ interface PortfolioItem {
   category: string
   description: string
   image: string
+  url?: string
 }
 
 const portfolioData: PortfolioItem[] = [
   {
     id: 1,
-    title: "Network Dashboard",
+    title: "OneAppNR",
     category: "Web Application",
-    description: "Real-time network monitoring dashboard with interactive visualizations.",
-    image: "/placeholder.svg?height=500&width=500",
+    description: "Comprehensive 5G NR dashboard for real-time analysis and optimization of network parameters.",
+    image: "/img/OneAppNR.webp",
+    url: "https://github.com/HarshatDy/OneAppNR"
   },
   {
     id: 2,
-    title: "Mobile App UI",
+    title: "Portfolio Website",
     category: "UI/UX Design",
-    description: "Modern mobile application interface with intuitive navigation.",
-    image: "/placeholder.svg?height=500&width=500",
+    description: "Modern, interactive portfolio website with custom animations and responsive design.",
+    image: "/img/Portfolio.png",
+    url: "https://github.com/HarshatDy/Harshatdy_Portfolio"
   },
   {
     id: 3,
-    title: "5G Implementation",
-    category: "Telecommunications",
-    description: "Enterprise-level 5G network implementation for a major corporation.",
-    image: "/placeholder.svg?height=500&width=500",
+    title: "Envisage Web App",
+    category: "Web Development",
+    description: "AI-powered content generation and summarization platform with real-time updates.",
+    image: "/img/Envisage-Web.png",
+    url: "https://github.com/HarshatDy/Envisage_Web_App"
   },
   {
     id: 4,
-    title: "E-commerce Platform",
-    category: "Web Development",
-    description: "Full-stack e-commerce solution with advanced filtering and search capabilities.",
-    image: "/placeholder.svg?height=500&width=500",
+    title: "Algorithmic Trading",
+    category: "Financial Technology",
+    description: "ML-based stock prediction system for intraday trading with high accuracy forecasts.",
+    image: "/img/Stocks_Tipper.webp",
+    url: "https://github.com/HarshatDy/Stocks_Tipper"
   },
   {
     id: 5,
-    title: "IoT Control System",
+    title: "Envisage V0.0",
     category: "Software Engineering",
-    description: "Centralized control system for IoT devices with real-time monitoring.",
+    description: "Early prototype of the Envisage platform with core content generation capabilities.",
     image: "/placeholder.svg?height=500&width=500",
+    url: "https://github.com/HarshatDy/EnvisageV0_0"
   },
   {
     id: 6,
-    title: "Analytics Dashboard",
+    title: "Societe v1.1",
     category: "Data Visualization",
-    description: "Comprehensive analytics dashboard with customizable reports and insights.",
+    description: "Social network analytics dashboard with interactive data visualization tools.",
     image: "/placeholder.svg?height=500&width=500",
+    url: "https://github.com/HarshatDy/Societe_v_1_1"
   },
 ]
 
@@ -107,11 +114,11 @@ function PortfolioCard({
       transition={{
         duration: 0.8,
         delay: index * 0.15,
-        ease: [0.25, 0.1, 0.25, 1.0], // Cubic bezier for smoother motion
+        ease: [0.25, 0.1, 0.25, 1.0],
       }}
       whileHover={{
         scale: 1.05,
-        y: -15, // Pop up effect
+        y: -15,
         zIndex: 10,
         boxShadow: "0 25px 50px -12px rgba(255, 128, 0, 0.15), 0 10px 20px -5px rgba(0, 0, 0, 0.3)",
         transition: {
@@ -120,6 +127,7 @@ function PortfolioCard({
         },
       }}
       className="portfolio-card group relative aspect-square overflow-hidden rounded-xl shadow-xl"
+      onClick={() => item.url && window.open(item.url, '_blank')}
     >
       <motion.div
         className="absolute inset-0 bg-cover bg-center"
@@ -136,15 +144,15 @@ function PortfolioCard({
         className="absolute bottom-0 left-0 w-full p-6"
         initial={{ y: 0 }}
         whileHover={{
-          y: "-50%",
+          y: "-40%",
           transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1.0] },
         }}
         style={{ translateY: "0" }}
       >
         <h3 className="mb-1 text-xl font-bold text-white">{item.title}</h3>
         <p className="mb-2 text-sm text-[#FF8000]">{item.category}</p>
-        <motion.p
-          className="max-h-0 overflow-hidden text-sm text-zinc-300"
+        <motion.div
+          className="flex flex-col gap-3 overflow-hidden text-sm text-zinc-300"
           initial={{ opacity: 0, height: 0 }}
           whileHover={{
             opacity: 1,
@@ -152,8 +160,19 @@ function PortfolioCard({
             transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1.0] },
           }}
         >
-          {item.description}
-        </motion.p>
+          <p>{item.description}</p>
+          {item.url && (
+            <a 
+              href={item.url}
+              className="mt-2 inline-flex items-center text-[#FF8000] hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+            >
+              View Project <span className="ml-1">→</span>
+            </a>
+          )}
+        </motion.div>
       </motion.div>
     </motion.div>
   )

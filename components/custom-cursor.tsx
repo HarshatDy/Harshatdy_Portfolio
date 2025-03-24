@@ -30,7 +30,7 @@ export default function CustomCursor() {
         setCursorText("CLICK ON IT ")
         setCursorVariant("text")
       } else {
-        setCursorText("GO OVER THE GRID ")
+        setCursorText("CHECKOUT MY GIT ")
         setCursorVariant("text")
       }
     }

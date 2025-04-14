@@ -75,7 +75,7 @@ export default function PortfolioGrid() {
         backgroundImage: "url('/placeholder.svg?height=100&width=100')",
         backgroundBlendMode: "overlay",
         backgroundSize: "100px",
-        backgroundOpacity: 0.05,
+        backgroundColor: "rgba(0, 0, 0, 0.95)", // Using rgba for transparency instead of backgroundOpacity
       }}
     >
       <div className="mx-auto max-w-6xl px-4">

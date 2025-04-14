@@ -160,7 +160,7 @@ export default function CustomCursor() {
       {cursorVariant === "text" && (
         <motion.div
           className="pointer-events-none fixed left-0 top-0 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-sm"
-          style={{ zIndex: isModalOpen ? 999 : 39 }} // Increased z-index when modal is open
+          style={{ zIndex: isModalOpen ? 500 : 39 }} // Increased z-index when modal is open
           animate={{
             x: mousePosition.x - 40,
             y: mousePosition.y - 40,
@@ -197,12 +197,6 @@ export default function CustomCursor() {
           {createCircularText(cursorText)}
         </motion.div>
       )}
-
-      <style jsx global>{`
-        body {
-          cursor: none;
-        }
-      `}</style>
     </>
   )
 }

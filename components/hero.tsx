@@ -99,7 +99,7 @@ export default function Hero() {
           className="text-xl font-light md:text-2xl lg:text-3xl"
         >
           <TypeAnimation
-            sequence={["Software Engineer", 1000, "5G Expert", 1000, "Web Designer", 1000, "Design Expert", 1000]}
+            sequence={["Software Engineer", 1000, "Wireless Network Engineer", 1000, "Product Designer", 1000, "Full Stack Developer", 1000]}
             wrapper="span"
             speed={50}
             repeat={Number.POSITIVE_INFINITY}

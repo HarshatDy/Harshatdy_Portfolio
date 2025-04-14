@@ -99,7 +99,7 @@ export default function Hero() {
           className="text-xl font-light md:text-2xl lg:text-3xl"
         >
           <TypeAnimation
-            sequence={["Software Engineer", 1000, "5G Expert", 1000, "Web Designer", 1000, "Design Expert", 1000]}
+            sequence={["Software Engineer", 1000, "Wireless Network Engineer", 1000, "Product Designer", 1000, "Full Stack Developer", 1000]}
             wrapper="span"
             speed={50}
             repeat={Number.POSITIVE_INFINITY}
@@ -107,30 +107,7 @@ export default function Hero() {
           />
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ delay: 2, duration: 1 }}
-          className="mt-12 flex justify-center"
-        >
-          <motion.button
-            className="group flex flex-col items-center"
-            whileHover={{ y: 5 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          >
-            <span className="mb-2 text-sm font-light">Discover My Work</span>
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{
-                repeat: Number.POSITIVE_INFINITY,
-                duration: 2,
-                ease: "easeInOut",
-              }}
-            >
-              <ChevronDown className="text-[#FF8000]" />
-            </motion.div>
-          </motion.button>
-        </motion.div>
+        
       </div>
 
       <BackgroundParticles />

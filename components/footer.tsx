@@ -10,11 +10,11 @@ export default function Footer() {
   const isInView = useInView(footerRef, { once: false, amount: 0.3 })
 
   const socialLinks = [
-    { icon: <Github size={20} />, href: "https://github.com", label: "GitHub" },
-    { icon: <Linkedin size={20} />, href: "https://linkedin.com", label: "LinkedIn" },
+    { icon: <Github size={20} />, href: "https://github.com/HarshatDy", label: "GitHub" },
+    { icon: <Linkedin size={20} />, href: "https://www.linkedin.com/in/harshat-dhanayat-5b715315a/", label: "LinkedIn" },
     { icon: <Twitter size={20} />, href: "https://twitter.com", label: "Twitter" },
     { icon: <Instagram size={20} />, href: "https://instagram.com", label: "Instagram" },
-    { icon: <Mail size={20} />, href: "mailto:contact@harshatdy.com", label: "Email" },
+    { icon: <Mail size={20} />, href: "dhanayat.harshat@gmail.com", label: "Email" },
   ]
 
   return (
@@ -24,20 +24,21 @@ export default function Footer() {
 
       <div className="mx-auto max-w-6xl px-4">
         <motion.div
-          className="grid gap-12 md:grid-cols-2 lg:grid-cols-4"
+          className="grid gap-12 md:grid-cols-2"
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8 }}
         >
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="space-y-8">
             <h3 className="text-2xl font-bold">Harshat Dy</h3>
             <p className="text-sm text-zinc-400">
               Creating innovative solutions at the intersection of software engineering and design.
             </p>
           </div>
 
-          {/* Quick Links */}
+          
+          {/* Quick Links
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-[#FF8000]">Quick Links</h4>
             <ul className="space-y-2">
@@ -49,33 +50,17 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Services */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-[#FF8000]">Services</h4>
-            <ul className="space-y-2">
-              {["Web Development", "5G Implementation", "UI/UX Design", "Software Engineering", "Consulting"].map(
-                (item) => (
-                  <li key={item}>
-                    <a href="#" className="text-sm text-zinc-400 transition-colors hover:text-white">
-                      {item}
-                    </a>
-                  </li>
-                ),
-              )}
-            </ul>
-          </div>
+          </div> */}
 
           {/* Contact */}
-          <div className="space-y-4">
+          <div className="space-y-4 md:justify-self-end">
             <h4 className="text-lg font-semibold text-[#FF8000]">Contact</h4>
             <p className="text-sm text-zinc-400">
-              San Francisco, CA
+              Bengaluru, KA
               <br />
-              contact@harshatdy.com
+              dhanayat.harshat@gmail.com
               <br />
-              +1 (555) 123-4567
+              +91 9967745003
             </p>
 
             <div className="flex space-x-4">
@@ -111,7 +96,7 @@ export default function Footer() {
         >
           <p>© {new Date().getFullYear()} Harshat Dy. All rights reserved.</p>
           <p className="mt-2">
-            Designed with <span className="text-[#FF8000]">♥</span> in San Francisco
+            Designed with <span className="text-[#FF8000]">♥</span> in Bengaluru.
           </p>
         </motion.div>
       </div>

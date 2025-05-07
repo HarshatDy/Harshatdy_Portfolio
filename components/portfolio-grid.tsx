@@ -83,12 +83,12 @@ export default function PortfolioGrid() {
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.6 }}
-          className="mb-16 text-center text-4xl font-bold md:text-5xl"
+          className="mb-16 text-center text-4xl font-bold md:text-5xl font-unbounded"
         >
           My <span className="text-[#FF8000]">Portfolio</span>
         </motion.h2>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 font-montserrat">
           {portfolioData.map((item, index) => (
             <PortfolioCard key={item.id} item={item} index={index} isInView={isInView} />
           ))}

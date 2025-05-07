@@ -64,10 +64,11 @@ export default function TimelineModal({ item, isOpen, onClose }: TimelineModalPr
               transition={{ type: "spring", damping: 25 }}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close button with higher z-index but still below cursor */}
+              {/* Close button with higher z-index for all devices including iPhone */}
               <button
-                className="absolute right-4 top-4 z-60 rounded-full bg-zinc-800 p-2 text-zinc-400 transition-colors hover:bg-zinc-700 hover:text-white"
+                className="absolute right-4 top-4 z-[100] rounded-full bg-zinc-800/90 p-2.5 text-zinc-300 transition-colors hover:bg-zinc-700 hover:text-white shadow-md"
                 onClick={onClose}
+                aria-label="Close modal"
               >
                 <X size={20} />
               </button>

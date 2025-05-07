@@ -168,8 +168,8 @@ export default function CustomCursor() {
             width: 80,
           }}
           transition={{
-            x: { type: "spring", stiffness: 300, damping: 30 },
-            y: { type: "spring", stiffness: 300, damping: 30 },
+            x: { type: "spring", stiffness: 800, damping: 30 },
+            y: { type: "spring", stiffness: 800, damping: 30 },
           }}
         />
       )}
@@ -190,8 +190,8 @@ export default function CustomCursor() {
               duration: 15,
               ease: "linear",
             },
-            x: { type: "spring", stiffness: 300, damping: 30 },
-            y: { type: "spring", stiffness: 300, damping: 30 },
+            x: { type: "spring", stiffness: 800, damping: 30 },
+            y: { type: "spring", stiffness: 800, damping: 30 },
           }}
         >
           {createCircularText(cursorText)}

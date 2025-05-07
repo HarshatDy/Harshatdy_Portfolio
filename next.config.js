@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  output: 'standalone', // Add this line for Docker optimization
+  output: 'export', // Add this line for Docker optimization
 }
 
 module.exports = nextConfig

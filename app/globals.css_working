@@ -23,6 +23,10 @@
   --input: 0 0% 89.8%;
   --ring: 24 100% 50%;
   --radius: 0.5rem;
+  
+  /* Font families */
+  --font-unbounded: 'Unbounded', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
 }
 
 .dark {
@@ -73,13 +77,12 @@ body {
   background: #ff8000;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
+/* Apply custom fonts */
+.font-unbounded {
+  font-family: var(--font-unbounded);
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-.hide-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+.font-montserrat {
+  font-family: var(--font-montserrat);
 }
+

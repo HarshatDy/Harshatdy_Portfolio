@@ -20,31 +20,7 @@ export interface TimelineItem {
 }
 
 const timelineData: TimelineItem[] = [
-  {
-    id: 1,
-    year: "2025",
-    title: "Stocks Tipper - AI-Based Stock Prediction",
-    description:
-      "Developed an AI-driven stock prediction system for intraday trading, providing accurate market forecasts after market close.",
-    image: "/img/Stocks_Tipper.webp",
-    detailedInfo: {
-      metrics: [
-        { value: "80%", label: "Prediction Accuracy" },
-        { value: "5+", label: "Team Members" },
-        { value: "6 mo", label: "Time Frame" },
-      ],
-      fullDescription: `Designed and implemented a machine learning-based stock prediction model, leveraging historical market data to generate actionable trading insights.
-
-This project involved extensive collaboration across financial and data science teams, utilizing advanced AI algorithms, feature engineering, and real-time data analysis. The solution continues to provide significant value and has become a benchmark for AI-driven stock prediction tools.`,
-      achievements: [
-        "Implemented machine learning models to predict intraday stock price movements.",
-        "Integrated Python, TensorFlow, and financial data APIs for real-time processing.",
-        "Developed a user-friendly dashboard for visualization of stock trends and predictions.",
-        "Optimized feature selection techniques to improve model accuracy and reliability."
-      ]
-    }
-  },
-  {
+    {
     id: 2,
     year: "2024",
     title: "5G Private Network Deployment",
@@ -68,7 +44,7 @@ This project involved extensive collaboration across multiple departments, imple
     }
   },
   {
-    id: 3,
+    id: 1,
     year: "2022",
     title: "OneAppNR - 5G NR Dashboard",
     description:
@@ -92,7 +68,7 @@ This project involved integrating Python-based backend processing with a React.j
     }
   },
   {
-    id: 4,
+    id: 3,
     year: "2025",
     title: "Envisage - AI-Powered News Summarization",
     description:
@@ -113,7 +89,31 @@ This project involved extensive collaboration across AI, backend, and frontend t
         "Implemented a seamless UI/UX using Figma and Bootstrap."
       ]
     }
-  }
+  },
+  {
+    id: 4,
+    year: "2025",
+    title: "Stocks Tipper - AI-Based Stock Prediction",
+    description:
+      "Developed an AI-driven stock prediction system for intraday trading, providing accurate market forecasts after market close.",
+    image: "/img/Stocks_Tipper.webp",
+    detailedInfo: {
+      metrics: [
+        { value: "80%", label: "Prediction Accuracy" },
+        { value: "5+", label: "Team Members" },
+        { value: "6 mo", label: "Time Frame" },
+      ],
+      fullDescription: `Designed and implemented a machine learning-based stock prediction model, leveraging historical market data to generate actionable trading insights.
+
+This project involved extensive collaboration across financial and data science teams, utilizing advanced AI algorithms, feature engineering, and real-time data analysis. The solution continues to provide significant value and has become a benchmark for AI-driven stock prediction tools.`,
+      achievements: [
+        "Implemented machine learning models to predict intraday stock price movements.",
+        "Integrated Python, TensorFlow, and financial data APIs for real-time processing.",
+        "Developed a user-friendly dashboard for visualization of stock trends and predictions.",
+        "Optimized feature selection techniques to improve model accuracy and reliability."
+      ]
+    }
+  },
 ]
 
 export default function Timeline() {
@@ -157,13 +157,13 @@ export default function Timeline() {
   }
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen bg-gradient-to-b from-black to-zinc-900 py-20">
+    <section ref={sectionRef} className="relative min-h-screen bg-gradient-to-b from-black to-zinc-900 py-20 font-montserrat">
       <div className="mx-auto max-w-6xl px-4">
         <motion.h2
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.6 }}
-          className="mb-16 text-center text-4xl font-bold md:text-5xl"
+          className="mb-16 text-center text-4xl font-bold md:text-5xl font-unbounded"
         >
           My <span className="text-[#FF8000]">Journey</span>
         </motion.h2>
@@ -257,7 +257,7 @@ function TimelineCard({
             <span className="text-xl font-bold text-[#FF8000]">{item.year}</span>
             <div className="ml-4 h-[1px] flex-1 bg-zinc-700"></div>
           </div>
-          <h3 className="mb-3 text-2xl font-bold">{item.title}</h3>
+          <h3 className="mb-3 text-2xl font-bold font-unbounded">{item.title}</h3>
           <p className="text-zinc-400">{item.description}</p>
         </div>
         <div className="aspect-video md:w-2/5">

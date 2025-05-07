@@ -18,7 +18,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer ref={footerRef} className="relative bg-zinc-900 py-16">
+    <footer ref={footerRef} className="relative bg-zinc-900 py-16 font-montserrat">
       {/* McLaren-inspired decorative element */}
       <div className="absolute bottom-0 left-0 h-1 w-full bg-gradient-to-r from-transparent via-[#FF8000] to-transparent opacity-70" />
 
@@ -31,7 +31,7 @@ export default function Footer() {
         >
           {/* Brand */}
           <div className="space-y-8">
-            <h3 className="text-2xl font-bold">Harshat Dy</h3>
+            <h3 className="text-2xl font-bold font-unbounded">Harshat Dhanayat</h3>
             <p className="text-sm text-zinc-400">
               Creating innovative solutions at the intersection of software engineering and design.
             </p>
@@ -54,7 +54,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="space-y-4 md:justify-self-end">
-            <h4 className="text-lg font-semibold text-[#FF8000]">Contact</h4>
+            <h4 className="text-lg font-semibold text-[#FF8000] font-unbounded">Contact</h4>
             <p className="text-sm text-zinc-400">
               Bengaluru, KA
               <br />
@@ -95,9 +95,9 @@ export default function Footer() {
           transition={{ duration: 0.8, delay: 0.5 }}
         >
           <p>© {new Date().getFullYear()} Harshat Dy. All rights reserved.</p>
-          <p className="mt-2">
-            Designed with <span className="text-[#FF8000]">♥</span> in Bengaluru.
-          </p>
+            <p className="mt-2">
+            <span className="line-through font-light text-zinc-1800">Mumbai</span>, Bengaluru.
+            </p>
         </motion.div>
       </div>
     </footer>

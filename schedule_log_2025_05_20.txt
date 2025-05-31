@@ -1,0 +1,13 @@
+2025-05-20 18:16:03,992 - Portfolio Blogger - ERROR - Exception running None: sequence item 1: expected str instance, NoneType found
+2025-05-20 18:16:03,992 - Portfolio Blogger - ERROR - Build failed
+2025-05-20 18:16:31,306 - Portfolio Blogger - INFO - Starting: C:\Users\hkd27\Documents\Personal\Html\V0 - 2\venv\Scripts\python.exe 
+2025-05-20 18:16:31,471 - Portfolio Blogger - ERROR - Script failed with return code 1: 
+2025-05-20 18:16:31,475 - Portfolio Blogger - ERROR - Error details: C:\Users\hkd27\Documents\Personal\Html\V0 - 2\venv\Scripts\python.exe: can't find '__main__' module in 'C:\\Users\\hkd27\\Documents\\Personal\\Html\\V0 - 2'
+
+2025-05-20 18:16:31,481 - Portfolio Blogger - ERROR - Build failed
+2025-05-20 18:21:16,377 - Portfolio Blogger - INFO - Starting: n p m   r u n   b u i l d
+2025-05-20 18:21:16,402 - Portfolio Blogger - ERROR - Exception running : [WinError 2] The system cannot find the file specified
+2025-05-20 18:21:16,402 - Portfolio Blogger - ERROR - Build failed
+2025-05-20 18:22:33,673 - Portfolio Blogger - INFO - Starting: n p m   r u n   b u i l d
+2025-05-20 18:22:33,700 - Portfolio Blogger - ERROR - Exception running : [WinError 2] The system cannot find the file specified
+2025-05-20 18:22:33,700 - Portfolio Blogger - ERROR - Build failed

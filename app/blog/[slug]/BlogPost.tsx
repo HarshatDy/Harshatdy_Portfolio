@@ -1,26 +1,44 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { ArrowLeft, Calendar, Clock, User } from "lucide-react"
 import Footer from "@/components/footer"
-import { BlogPost as BlogPostType } from "@/app/data/blogPosts"
+import { blogPosts, BlogPost as BlogPostType } from "@/app/data/blogPosts"
 
-interface BlogPostProps {
-  post: BlogPostType;
-}
-
-export default function BlogPost({ post }: BlogPostProps) {
+export default function BlogPost() {
   const router = useRouter()
+  const { slug } = useParams()
+  const [post, setPost] = useState<BlogPostType | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
+    // Find the post that matches the slug
+    const foundPost = blogPosts.find((post) => post.slug === slug)
+    setPost(foundPost || null)
+
     // Simulate loading
     setTimeout(() => {
       setIsLoaded(true)
     }, 500)
-  }, [])
+  }, [slug])
+
+  if (!post) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-white">Post not found</h1>
+          <button
+            onClick={() => router.push("/")}
+            className="mt-4 rounded-md bg-[#FF8000] px-4 py-2 text-white transition-colors hover:bg-[#FF8000]/80"
+          >
+            Return Home
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-black text-white font-['Roboto_Mono']">
@@ -189,6 +207,44 @@ export default function BlogPost({ post }: BlogPostProps) {
                 experience in the tech industry.
               </p>
             </div>
+          </div>
+        </motion.div>
+
+        {/* Related Posts */}
+        <motion.div
+          className="mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+        >
+          <h3 className="mb-6 text-2xl font-bold font-bold">Related Posts</h3>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {blogPosts
+              .filter((relatedPost) => relatedPost.slug !== post.slug)
+              .slice(0, 3)
+              .map((relatedPost) => (
+                <div
+                  key={relatedPost.slug}
+                  className="cursor-pointer overflow-hidden rounded-lg bg-zinc-900 transition-transform hover:scale-105"
+                  onClick={() => {
+                    router.push(`/blog/${relatedPost.slug}`)
+                    window.scrollTo(0, 0)
+                  }}
+                >
+                  <div className="aspect-video w-full overflow-hidden">
+                    <img
+                      src={relatedPost.heroImage || "/placeholder.svg"}
+                      alt={relatedPost.title}
+                      className="h-full w-full object-cover transition-transform hover:scale-110"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <div className="mb-1 text-xs font-medium text-[#FF8000] font-medium">{relatedPost.category}</div>
+                    <h4 className="mb-2 text-lg font-bold font-bold">{relatedPost.title}</h4>
+                    <p className="text-sm text-zinc-400 line-clamp-2 font-light">{relatedPost.excerpt}</p>
+                  </div>
+                </div>
+              ))}
           </div>
         </motion.div>
       </div>

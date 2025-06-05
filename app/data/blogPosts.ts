@@ -27,6 +27,8 @@ export interface SliderBlogPost {
     date: string
     excerpt: string
     heroImage: string
+    readTime: string
+    tags: string[]
 }
 
 interface MongoDocument {
@@ -40,7 +42,7 @@ function removeId<T extends { _id?: any }>(doc: T): Omit<T, '_id'> {
 }
 
 export const blogPosts: BlogPost[] = []
-export const sliderblogPosts : SliderBlogPost[] = []
+export const sliderblogPosts: SliderBlogPost[] = []
 
 export async function fetchBlogs(): Promise<BlogPost[]> {
   try {
@@ -94,13 +96,23 @@ export async function fetchHeroblogs(): Promise<SliderBlogPost[]> {
   }
 }
 
-async function initializeBlogData() {
+// Initialize blog data immediately
+let isInitialized = false;
+
+export async function initializeBlogData() {
+  if (isInitialized) return;
+  
   try {
+    console.log('Initializing blog data...');
     // Fetch both blog types in parallel
     const [blogs, heroBlogs] = await Promise.all([
       fetchBlogs(),
       fetchHeroblogs()
     ]);
+
+    // Clear existing data
+    blogPosts.length = 0;
+    sliderblogPosts.length = 0;
 
     // Assign the fetched data to our exported arrays
     blogPosts.push(...blogs);
@@ -108,11 +120,14 @@ async function initializeBlogData() {
 
     console.log('Blog posts initialized:', blogPosts.length);
     console.log('Slider blog posts initialized:', sliderblogPosts.length);
+    console.log('Slider blog Categories:', sliderblogPosts.map((post) => post.category));
+    isInitialized = true;
   } catch (error) {
     console.error('Failed to initialize blog data:', error);
   }
 }
 
+// Call initialization
 initializeBlogData();
 
 // console.log(hero_blogs)

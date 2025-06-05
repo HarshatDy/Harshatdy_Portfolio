@@ -135,7 +135,7 @@ export default function BlogSlider() {
           >
             <div
               className="group h-full cursor-pointer overflow-hidden rounded-xl bg-zinc-900"
-              onClick={() => router.push(`/blog/${post.slug}`)}
+              onClick={() => router.push(`/train-of-thoughts/${post.slug}`)}
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden">
                 <div

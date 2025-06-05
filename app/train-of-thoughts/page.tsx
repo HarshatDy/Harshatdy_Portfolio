@@ -5,31 +5,42 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Calendar, Clock, Filter, Menu, X } from "lucide-react"
 import Footer from "@/components/footer"
-import { SliderBlogPost, sliderblogPosts } from "@/app/data/blogPosts"
-
-// Extract unique categories
-const categories = ["All", ...Array.from(new Set(sliderblogPosts.map((post) => post.category)))]
+import { SliderBlogPost, sliderblogPosts, initializeBlogData } from "@/app/data/blogPosts"
 
 export default function TrainOfThoughts() {
   const router = useRouter()
   const [isLoaded, setIsLoaded] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState("All")
-  const [filteredPosts, setFilteredPosts] = useState(sliderblogPosts)
+  const [filteredPosts, setFilteredPosts] = useState<SliderBlogPost[]>([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [categories, setCategories] = useState<string[]>(["All"])
 
   useEffect(() => {
-    setIsLoaded(true)
-  }, [])
+    const loadData = async () => {
+      try {
+        await initializeBlogData();
+        // Extract unique categories after data is loaded
+        const uniqueCategories = ["All", ...Array.from(new Set(sliderblogPosts.map((post) => post.category)))];
+        setCategories(uniqueCategories);
+        setFilteredPosts(sliderblogPosts);
+        setIsLoaded(true);
+      } catch (error) {
+        console.error('Failed to load blog data:', error);
+      }
+    };
+
+    loadData();
+  }, []);
 
   useEffect(() => {
     if (selectedCategory === "All") {
-      setFilteredPosts(sliderblogPosts)
+      setFilteredPosts(sliderblogPosts);
     } else {
-      setFilteredPosts(sliderblogPosts.filter((post) => post.category === selectedCategory))
+      setFilteredPosts(sliderblogPosts.filter((post) => post.category === selectedCategory));
     }
-  }, [selectedCategory])
+  }, [selectedCategory]);
 
-   return (
+  return (
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-b from-zinc-900 to-black py-20">
@@ -212,7 +223,7 @@ export default function TrainOfThoughts() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     whileHover={{ scale: 1.02 }}
-                    onClick={() => router.push(`/blog/${post.slug}`)}
+                    onClick={() => router.push(`/train-of-thoughts/${post.slug}`)}
                     layout
                   >
                     <div className="flex flex-col lg:flex-row">

@@ -49,14 +49,14 @@ export default function BlogPost() {
 
         <div className="absolute bottom-0 left-0 w-full p-8">
           <motion.button
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/train-of-thoughts")}
             className="mb-6 flex items-center text-sm text-zinc-400 transition-colors hover:text-[#FF8000] font-light"
             initial={{ opacity: 0, x: -20 }}
             animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
             transition={{ duration: 0.5 }}
           >
             <ArrowLeft size={16} className="mr-2" />
-            Back to Portfolio
+            Back to Train of Thoughts
           </motion.button>
 
           <motion.div
@@ -227,7 +227,7 @@ export default function BlogPost() {
                   key={relatedPost.slug}
                   className="cursor-pointer overflow-hidden rounded-lg bg-zinc-900 transition-transform hover:scale-105"
                   onClick={() => {
-                    router.push(`/blog/${relatedPost.slug}`)
+                    router.push(`/train-of-thoughts/${relatedPost.slug}`)
                     window.scrollTo(0, 0)
                   }}
                 >

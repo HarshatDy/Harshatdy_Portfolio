@@ -1,12 +1,21 @@
+import { notFound } from 'next/navigation'
 import BlogPost from './BlogPost'
-import { blogPosts } from '@/app/data/blogPosts'
+import { fetchBlogs } from '@/app/data/blogPosts'
 
 export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
+  const blogs = await fetchBlogs()
+  return blogs.map((post) => ({
     slug: post.slug,
   }))
 }
 
-export default function Page() {
-  return <BlogPost />
+export default async function Page({ params }: { params: { slug: string } }) {
+  const blogs = await fetchBlogs()
+  const post = blogs.find((post) => post.slug === params.slug)
+  
+  if (!post) {
+    notFound()
+  }
+  
+  return <BlogPost post={post} />
 } 

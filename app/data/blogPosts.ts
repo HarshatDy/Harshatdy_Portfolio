@@ -46,24 +46,19 @@ export const sliderblogPosts: SliderBlogPost[] = []
 
 export async function fetchBlogs(): Promise<BlogPost[]> {
   try {
+    // Fetch from MongoDB
     const response = await fetch('http://127.0.0.1:3001/api/blogs', {
-      cache: 'no-store' // Disable caching
+      cache: 'no-store'
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log('Before Cleaning ', data);
-    
-    // Remove _id from each blog post while preserving all other fields
-    const cleanedBlogs = data.documents.map((blog: MongoDocument) => {
+    return data.documents.map((blog: MongoDocument) => {
       const { _id, ...rest } = blog;
-      return rest as BlogPost;  // Type assertion to ensure correct type
+      return rest as BlogPost;
     });
-    
-    console.log('After Cleaning', cleanedBlogs);
-    return cleanedBlogs;
   } catch (error) {
     console.error('Failed to fetch blogs:', error);
     return [];
@@ -72,24 +67,19 @@ export async function fetchBlogs(): Promise<BlogPost[]> {
 
 export async function fetchHeroblogs(): Promise<SliderBlogPost[]> {
   try {
+    // Fetch from MongoDB
     const response = await fetch('http://127.0.0.1:3001/api/hero_blogs', {
-      cache: 'no-store' // Disable caching
+      cache: 'no-store'
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    console.log("About to call the blogs");
+
     const data = await response.json();
-    console.log('Fetched hero_blogs:', data);
-    
-    // Remove _id from each blog post while preserving all other fields
-    const cleanedBlogs = data.documents.map((blog: MongoDocument) => {
+    return data.documents.map((blog: MongoDocument) => {
       const { _id, ...rest } = blog;
-      return rest as SliderBlogPost;  // Type assertion to ensure correct type
+      return rest as SliderBlogPost;
     });
-    
-    console.log('After Cleaning', cleanedBlogs);
-    return cleanedBlogs;
   } catch (error) {
     console.error('Failed to fetch hero_blogs:', error);
     return [];

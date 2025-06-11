@@ -1,0 +1,46 @@
+[
+  {
+    "slug": "docker-image-compression-techniques",
+    "title": "Docker Image Compression Techniques",
+    "category": "Docker",
+    "author": "Harshat Dy",
+    "date": "{timedate}",
+    "readTime": "15-20 minutes",
+    "tags": [
+      "Docker",
+      "Image Compression",
+      "Optimization",
+      "Containers",
+      "Node.js",
+      "Distroless",
+      "Alpine",
+      "Multi-Stage Builds",
+      "Slim",
+      "Security"
+    ],
+    "heroImage": "{doc_img}",
+    "excerpt": "Explore various Docker image compression techniques to reduce image size, improve deployment speed, and enhance security. From basic base image selection to advanced methods like multi-stage builds, distroless images, and static binaries, learn how to optimize your Docker images effectively."
+  },
+  {
+    "slug": "ubers-ai-code-cleaner-meet-fixrleak",
+    "title": "Uber's AI Code Cleaner: Meet FixrLeak",
+    "category": "Engineering",
+    "author": "Harshat Dy",
+    "date": "October 26, 2023",
+    "readTime": "7 min",
+    "tags": [
+      "AI",
+      "Java",
+      "Resource Leaks",
+      "FixrLeak",
+      "SonarQube",
+      "GenAI",
+      "Code Quality",
+      "Uber",
+      "AST Analysis",
+      "Code Review"
+    ],
+    "heroImage": "https://miro.medium.com/v2/resize:fit:1400/1*mkM8K-KqP5v8h_V8Y66-7A.png",
+    "excerpt": "FixrLeak, a new framework using generative AI (GenAI), automatically finds and fixes resource leaks in Java applications at Uber. It leverages SonarQube reports, AST analysis, and prompt engineering to generate accurate and reliable code fixes, significantly improving code quality and saving developer time."
+  }
+]

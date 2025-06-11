@@ -2,7 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  output: 'export', // Add this line for Docker optimization
+  images: {
+    domains: ['localhost'],
+  },
+  experimental: {
+    optimizeCss: true,
+  },
 }
 
 module.exports = nextConfig

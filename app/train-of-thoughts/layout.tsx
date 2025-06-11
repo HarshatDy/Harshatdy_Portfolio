@@ -7,11 +7,11 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Harshat Dy | Blog",
+  title: "Harshat Dy | Train of Thoughts",
   description: "Insights and articles on software engineering, 5G, web design, and more",
 }
 
-export default function BlogLayout({
+export default function TrainOfThoughtsLayout({
   children,
 }: Readonly<{
   children: React.ReactNode

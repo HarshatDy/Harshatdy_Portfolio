@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { TypeAnimation } from "react-type-animation"
-import BlogSlider from "./blog-slider"
+// import BlogSlider from "./blog-slider"
 import { FileDown } from "lucide-react"
 
 export default function Hero() {
@@ -144,7 +144,7 @@ export default function Hero() {
           animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8, delay: 2 }}
         >
-          <BlogSlider />
+          {/* <BlogSlider /> */}
         </motion.div>
       </div>
 

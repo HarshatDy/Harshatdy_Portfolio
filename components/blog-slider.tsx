@@ -4,8 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { sliderblogPosts } from "@/app/data/blogPosts"
-
+import { fetchHeroblogs, SliderBlogPost } from "@/app/data/blogPosts"
 
 // useEffect(() => )
 
@@ -44,6 +43,23 @@ export default function BlogSlider() {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [posts, setPosts] = useState<SliderBlogPost[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const heroBlogs = await fetchHeroblogs();
+        setPosts(heroBlogs);
+      } catch (error) {
+        console.error('Failed to load hero blogs:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadPosts();
+  }, []);
 
   const checkScrollability = () => {
     if (!sliderRef.current) return
@@ -60,7 +76,7 @@ export default function BlogSlider() {
       checkScrollability()
       return () => slider.removeEventListener("scroll", checkScrollability)
     }
-  }, [])
+  }, [posts]) // Re-check when posts change
 
   const scrollLeft = () => {
     if (!sliderRef.current) return
@@ -71,87 +87,97 @@ export default function BlogSlider() {
   const scrollRight = () => {
     if (!sliderRef.current) return
     sliderRef.current.scrollBy({ left: 350, behavior: "smooth" })
-    setActiveIndex((prev) => Math.min(prev + 1, sliderblogPosts.length - 1))
+    setActiveIndex((prev) => Math.min(prev + 1, posts.length - 1))
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[200px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#FF8000]"></div>
+      </div>
+    );
+  }
+
+  if (posts.length === 0) {
+    return null;
   }
 
   return (
     <div className="relative w-full">
       <h3 className="mb-4 text-center text-sm font-medium uppercase tracking-wider text-[#FF8000]">Latest Articles</h3>
 
-      <div className="relative">
-        {/* Left scroll button */}
-        <motion.button
-          onClick={scrollLeft}
-          className="absolute -left-4 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/80 text-white backdrop-blur-sm transition-all hover:bg-[#FF8000]/80 disabled:opacity-0 md:-left-6 md:h-10 md:w-10"
-          disabled={!canScrollLeft}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: canScrollLeft ? 1 : 0 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <ChevronLeft size={20} />
-        </motion.button>
+      {/* Left scroll button */}
+      <motion.button
+        onClick={scrollLeft}
+        className="absolute -left-4 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/80 text-white backdrop-blur-sm transition-all hover:bg-[#FF8000]/80 disabled:opacity-0 md:-left-6 md:h-10 md:w-10"
+        disabled={!canScrollLeft}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: canScrollLeft ? 1 : 0 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <ChevronLeft size={20} />
+      </motion.button>
 
-        {/* Slider container */}
-        <div
-          ref={sliderRef}
-          className="hide-scrollbar flex w-full snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-4"
-        >
-          {sliderblogPosts.map((post, index) => (
-            <motion.div
-              key={post.slug}
-              className="relative min-w-[280px] snap-start md:min-w-[320px]"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ scale: 1.03 }}
+      {/* Slider container */}
+      <div
+        ref={sliderRef}
+        className="hide-scrollbar flex w-full snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-4"
+      >
+        {posts.map((post, index) => (
+          <motion.div
+            key={post.slug}
+            className="relative min-w-[280px] snap-start md:min-w-[320px]"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            whileHover={{ scale: 1.03 }}
+          >
+            <div
+              className="group h-full cursor-pointer overflow-hidden rounded-xl bg-zinc-900"
+              onClick={() => router.push(`/train-of-thoughts/${post.slug}`)}
             >
-              <div
-                className="group h-full cursor-pointer overflow-hidden rounded-xl bg-zinc-900"
-                onClick={() => router.push(`/blog/${post.slug}`)}
-              >
-                <div className="relative aspect-[16/10] w-full overflow-hidden">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                    style={{ backgroundImage: `url(${post.heroImage})` }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+              <div className="relative aspect-[16/10] w-full overflow-hidden">
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                  style={{ backgroundImage: `url(${post.heroImage})` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
 
-                  <div className="absolute bottom-0 left-0 w-full p-3">
-                    <div className="mb-1 text-xs font-medium text-[#FF8000]">{post.category}</div>
-                    <h4 className="line-clamp-1 text-sm font-bold text-white md:text-base">{post.title}</h4>
-                  </div>
-                </div>
-
-                <div className="p-3">
-                  <p className="text-xs text-zinc-400 line-clamp-1 md:text-sm">{post.excerpt}</p>
-                  <div className="mt-2 flex items-center justify-between">
-                    <span className="text-xs text-zinc-500">{post.date}</span>
-                    <span className="text-xs font-medium text-[#FF8000] group-hover:underline">Read More</span>
-                  </div>
+                <div className="absolute bottom-0 left-0 w-full p-3">
+                  <div className="mb-1 text-xs font-medium text-[#FF8000]">{post.category}</div>
+                  <h4 className="line-clamp-1 text-sm font-bold text-white md:text-base">{post.title}</h4>
                 </div>
               </div>
-            </motion.div>
-          ))}
-        </div>
 
-        {/* Right scroll button */}
-        <motion.button
-          onClick={scrollRight}
-          className="absolute -right-4 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/80 text-white backdrop-blur-sm transition-all hover:bg-[#FF8000]/80 disabled:opacity-0 md:-right-6 md:h-10 md:w-10"
-          disabled={!canScrollRight}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: canScrollRight ? 1 : 0 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <ChevronRight size={20} />
-        </motion.button>
+              <div className="p-3">
+                <p className="text-xs text-zinc-400 line-clamp-1 md:text-sm">{post.excerpt}</p>
+                <div className="mt-2 flex items-center justify-between">
+                  <span className="text-xs text-zinc-500">{post.date}</span>
+                  <span className="text-xs font-medium text-[#FF8000] group-hover:underline">Read More</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        ))}
       </div>
+
+      {/* Right scroll button */}
+      <motion.button
+        onClick={scrollRight}
+        className="absolute -right-4 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/80 text-white backdrop-blur-sm transition-all hover:bg-[#FF8000]/80 disabled:opacity-0 md:-right-6 md:h-10 md:w-10"
+        disabled={!canScrollRight}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: canScrollRight ? 1 : 0 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <ChevronRight size={20} />
+      </motion.button>
 
       {/* Pagination dots */}
       <div className="mt-4 flex justify-center gap-1">
-        {sliderblogPosts.map((_, index) => (
+        {posts.map((_, index) => (
           <motion.button
             key={index}
             className={`h-1.5 rounded-full transition-all ${

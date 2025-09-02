@@ -1,3 +1,7 @@
+import jsonBlogPosts from '../../public/static/blogs.json'
+import jsonHeroBlogs from '../../public/static/hero_blogs.json'
+
+
 // Define the types for our blog post data
 export interface ContentBlock {
   type: 'paragraph' | 'heading' | 'image' | 'code';
@@ -45,45 +49,51 @@ export const blogPosts: BlogPost[] = []
 export const sliderblogPosts: SliderBlogPost[] = []
 
 export async function fetchBlogs(): Promise<BlogPost[]> {
-  try {
-    // Fetch from MongoDB
-    const response = await fetch('http://127.0.0.1:3001/api/blogs', {
-      cache: 'no-store'
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+  
+  return jsonBlogPosts as BlogPost[]
+  
+  
+  // try {
+  //   // Fetch from MongoDB
+  //   const response = await fetch('http://127.0.0.1:3001/api/blogs', {
+  //     cache: 'no-store'
+  //   });
+  //   if (!response.ok) {
+  //     throw new Error(`HTTP error! status: ${response.status}`);
+  //   }
 
-    const data = await response.json();
-    return data.documents.map((blog: MongoDocument) => {
-      const { _id, ...rest } = blog;
-      return rest as BlogPost;
-    });
-  } catch (error) {
-    console.error('Failed to fetch blogs:', error);
-    return [];
-  }
+  //   const data = await response.json();
+  //   return data.documents.map((blog: MongoDocument) => {
+  //     const { _id, ...rest } = blog;
+  //     return rest as BlogPost;
+  //   });
+  // } catch (error) {
+  //   console.error('Failed to fetch blogs:', error);
+  //   return [];
+  // }
 }
 
 export async function fetchHeroblogs(): Promise<SliderBlogPost[]> {
-  try {
-    // Fetch from MongoDB
-    const response = await fetch('http://127.0.0.1:3001/api/hero_blogs', {
-      cache: 'no-store'
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+  
+  return jsonHeroBlogs as SliderBlogPost[]
+  // try {
+  //   // Fetch from MongoDB
+  //   const response = await fetch('http://127.0.0.1:3001/api/hero_blogs', {
+  //     cache: 'no-store'
+  //   });
+  //   if (!response.ok) {
+  //     throw new Error(`HTTP error! status: ${response.status}`);
+  //   }
 
-    const data = await response.json();
-    return data.documents.map((blog: MongoDocument) => {
-      const { _id, ...rest } = blog;
-      return rest as SliderBlogPost;
-    });
-  } catch (error) {
-    console.error('Failed to fetch hero_blogs:', error);
-    return [];
-  }
+  //   const data = await response.json();
+  //   return data.documents.map((blog: MongoDocument) => {
+  //     const { _id, ...rest } = blog;
+  //     return rest as SliderBlogPost;
+  //   });
+  // } catch (error) {
+  //   console.error('Failed to fetch hero_blogs:', error);
+  //   return [];
+  // }
 }
 
 // Initialize blog data immediately
@@ -118,6 +128,8 @@ export async function initializeBlogData() {
 }
 
 // Call initialization
+
+
 initializeBlogData();
 
 // console.log(hero_blogs)

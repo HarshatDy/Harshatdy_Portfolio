@@ -152,6 +152,8 @@
 body {
   @apply bg-background text-foreground;
   overflow-x: hidden;
+  cursor: none; /* Hide default cursor */
+
 }
 
 ::-webkit-scrollbar {

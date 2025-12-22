@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { motion } from "framer-motion"
 
 export default function CustomCursor() {
@@ -9,6 +10,11 @@ export default function CustomCursor() {
   const [cursorVariant, setCursorVariant] = useState("default")
   const [isHovering, setIsHovering] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const pathname = usePathname()
+  
+  // Check if we're on train-of-thoughts pages
+  const isTrainOfThoughts = pathname?.startsWith("/train-of-thoughts")
+  const isBlogPost = pathname?.match(/^\/train-of-thoughts\/[^/]+$/)
 
   useEffect(() => {
     const mouseMove = (e: MouseEvent) => {
@@ -22,23 +28,50 @@ export default function CustomCursor() {
       const scrollY = window.scrollY
       const windowHeight = window.innerHeight
 
-      // Simple text based on section
-      if (scrollY < windowHeight) {
-        setCursorText("SCROLL DOWN ")
-        setCursorVariant("text")
-      } else if (scrollY < windowHeight * 2) {
-        setCursorText("CLICK ON IT ")
-        setCursorVariant("text")
+      if (isBlogPost) {
+        // Custom text for individual blog post pages
+        if (scrollY < windowHeight * 0.3) {
+          setCursorText("SCROLL TO READ ")
+          setCursorVariant("text")
+        } else if (scrollY < windowHeight * 1.5) {
+          setCursorText("CONTINUE READING ")
+          setCursorVariant("text")
+        } else {
+          setCursorText("READ RELATED POSTS ")
+          setCursorVariant("text")
+        }
+      } else if (isTrainOfThoughts) {
+        // Custom text for train-of-thoughts listing page
+        if (scrollY < windowHeight * 0.5) {
+          setCursorText("EXPLORE THOUGHTS ")
+          setCursorVariant("text")
+        } else {
+          setCursorText("READ ARTICLES ")
+          setCursorVariant("text")
+        }
       } else {
-        setCursorText("CHECKOUT MY GIT ")
-        setCursorVariant("text")
+        // Original portfolio page text
+        if (scrollY < windowHeight) {
+          setCursorText("SCROLL DOWN ")
+          setCursorVariant("text")
+        } else if (scrollY < windowHeight * 2) {
+          setCursorText("CLICK ON IT ")
+          setCursorVariant("text")
+        } else {
+          setCursorText("CHECKOUT MY GIT ")
+          setCursorVariant("text")
+        }
       }
     }
 
     // Simple hover handlers
     const handleMouseEnterCard = () => {
       setIsHovering(true)
-      setCursorText("VIEW DETAILS ")
+      if (isTrainOfThoughts) {
+        setCursorText("READ ARTICLE ")
+      } else {
+        setCursorText("VIEW DETAILS ")
+      }
     }
     
     const handleMouseLeaveCard = () => {
@@ -46,11 +79,14 @@ export default function CustomCursor() {
       handleSectionChange()
     }
 
-    // Card selections
+    // Card selections - different selectors for train-of-thoughts
     const timelineCards = document.querySelectorAll('.timeline-card')
     const portfolioCards = document.querySelectorAll('.portfolio-card')
+    const blogPostCards = document.querySelectorAll('article[class*="cursor-pointer"]')
+    const relatedPostCards = document.querySelectorAll('[class*="related-post"]')
+    const categoryButtons = document.querySelectorAll('button[class*="rounded-lg"]')
     
-    // Event listeners
+    // Event listeners for portfolio cards
     timelineCards.forEach(card => {
       card.addEventListener('mouseenter', handleMouseEnterCard)
       card.addEventListener('mouseleave', handleMouseLeaveCard)
@@ -60,6 +96,34 @@ export default function CustomCursor() {
       card.addEventListener('mouseenter', handleMouseEnterCard)
       card.addEventListener('mouseleave', handleMouseLeaveCard)
     })
+
+    // Event listeners for blog post cards (train-of-thoughts listing)
+    blogPostCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        setIsHovering(true)
+        setCursorText("READ ARTICLE ")
+      })
+      card.addEventListener('mouseleave', handleMouseLeaveCard)
+    })
+
+    // Event listeners for related posts (individual blog post page)
+    relatedPostCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        setIsHovering(true)
+        setCursorText("READ RELATED ")
+      })
+      card.addEventListener('mouseleave', handleMouseLeaveCard)
+    })
+
+    // Event listeners for category buttons
+    if (isTrainOfThoughts && !isBlogPost) {
+      categoryButtons.forEach(button => {
+        button.addEventListener('mouseenter', () => {
+          setCursorText("FILTER BY ")
+        })
+        button.addEventListener('mouseleave', handleMouseLeaveCard)
+      })
+    }
 
     // Add event listener for modal state
     const handleModalOpen = () => {
@@ -94,10 +158,33 @@ export default function CustomCursor() {
         card.removeEventListener('mouseleave', handleMouseLeaveCard)
       })
 
+      blogPostCards.forEach(card => {
+        card.removeEventListener('mouseenter', () => {
+          setIsHovering(true)
+          setCursorText("READ ARTICLE ")
+        })
+        card.removeEventListener('mouseleave', handleMouseLeaveCard)
+      })
+
+      relatedPostCards.forEach(card => {
+        card.removeEventListener('mouseenter', () => {
+          setIsHovering(true)
+          setCursorText("READ RELATED ")
+        })
+        card.removeEventListener('mouseleave', handleMouseLeaveCard)
+      })
+
+      categoryButtons.forEach(button => {
+        button.removeEventListener('mouseenter', () => {
+          setCursorText("FILTER BY ")
+        })
+        button.removeEventListener('mouseleave', handleMouseLeaveCard)
+      })
+
       window.removeEventListener("modalOpen", handleModalOpen as EventListener)
       window.removeEventListener("modalClose", handleModalClose as EventListener)
     }
-  }, [])
+  }, [isTrainOfThoughts, isBlogPost])
 
   // Function to create circular text with each letter facing the center
   const createCircularText = (text: string) => {
@@ -141,7 +228,7 @@ export default function CustomCursor() {
       {/* Main cursor dot */}
       <motion.div
         className="pointer-events-none fixed left-0 top-0 flex items-center justify-center rounded-full bg-[#FF8000]"
-        style={{ zIndex: isModalOpen ? 1000 : 50 }} // Increased z-index when modal is open
+        style={{ zIndex: isModalOpen ? 1000 : 50 }}
         animate={{
           x: mousePosition.x - 10,
           y: mousePosition.y - 10,
@@ -160,7 +247,7 @@ export default function CustomCursor() {
       {cursorVariant === "text" && (
         <motion.div
           className="pointer-events-none fixed left-0 top-0 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-sm"
-          style={{ zIndex: isModalOpen ? 500 : 39 }} // Increased z-index when modal is open
+          style={{ zIndex: isModalOpen ? 500 : 39 }}
           animate={{
             x: mousePosition.x - 40,
             y: mousePosition.y - 40,
@@ -178,11 +265,11 @@ export default function CustomCursor() {
       {cursorVariant === "text" && (
         <motion.div
           className="pointer-events-none fixed left-0 top-0 flex h-0 w-0 items-center justify-center"
-          style={{ zIndex: isModalOpen ? 999 : 40 }} // Increased z-index when modal is open
+          style={{ zIndex: isModalOpen ? 999 : 40 }}
           animate={{
             x: mousePosition.x,
             y: mousePosition.y,
-            rotate: [0, 360], // Slow rotation of the entire text circle
+            rotate: [0, 360],
           }}
           transition={{
             rotate: {

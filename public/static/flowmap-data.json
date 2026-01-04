@@ -1,0 +1,187 @@
+[
+  {
+    "id": "web-development",
+    "title": "Web Development",
+    "icon": "🌐",
+    "description": "Frontend, backend, and fullstack web technologies",
+    "subtopics": [
+      {
+        "id": "frontend",
+        "title": "Frontend",
+        "icon": "⚡",
+        "description": "User interface and interactive experiences",
+        "subtopics": [
+          {
+            "id": "react",
+            "title": "React & Next.js",
+            "icon": "⚛️",
+            "description": "Modern React patterns and Next.js app router",
+            "content": "Learn advanced React patterns, hooks, and Next.js features for building scalable web applications.",
+            "sections": [
+              {
+                "id": "section-1767507715059-uk3edqgg5",
+                "label": "Local",
+                "icon": "Local",
+                "slug": "l",
+                "content": "Local"
+              },
+              {
+                "id": "section-1767507820508-g7lmdb1mi",
+                "label": "Demo",
+                "icon": "Demo",
+                "slug": "d",
+                "content": "Demo"
+              }
+            ]
+          },
+          {
+            "id": "css",
+            "title": "CSS & Animations",
+            "icon": "🎨",
+            "description": "Styling and motion design",
+            "content": "Master advanced CSS techniques, Tailwind, and create smooth animations with Framer Motion."
+          }
+        ]
+      },
+      {
+        "id": "backend",
+        "title": "Backend",
+        "icon": "🔧",
+        "description": "Server-side logic and databases",
+        "subtopics": [
+          {
+            "id": "databases",
+            "title": "Databases",
+            "icon": "💾",
+            "description": "Data storage and retrieval",
+            "content": "Explore SQL, NoSQL databases, ORM patterns, and database optimization techniques."
+          },
+          {
+            "id": "apis",
+            "title": "APIs & Auth",
+            "icon": "🔐",
+            "description": "API design and security",
+            "content": "Build RESTful APIs, implement authentication, and secure your applications with best practices."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "design",
+    "title": "UI/UX Design",
+    "icon": "🎭",
+    "description": "Design systems and user experience",
+    "subtopics": [
+      {
+        "id": "design-systems",
+        "title": "Design Systems",
+        "icon": "📐",
+        "description": "Building component libraries",
+        "subtopics": [
+          {
+            "id": "components",
+            "title": "Components",
+            "icon": "🧩",
+            "description": "Reusable UI elements",
+            "content": "Learn to build and maintain scalable component libraries with proper documentation and versioning."
+          },
+          {
+            "id": "typography",
+            "title": "Typography",
+            "icon": "📝",
+            "description": "Font and text design",
+            "content": "Understand typography principles, font pairing, hierarchy, and readability best practices."
+          }
+        ]
+      },
+      {
+        "id": "ux-principles",
+        "title": "UX Principles",
+        "icon": "👥",
+        "description": "User-centered design",
+        "subtopics": [
+          {
+            "id": "user-research",
+            "title": "User Research",
+            "icon": "🔍",
+            "description": "Understanding users",
+            "content": "Master user research methods, interviews, and data analysis to inform design decisions."
+          },
+          {
+            "id": "usability",
+            "title": "Usability Testing",
+            "icon": "✅",
+            "description": "Validation and iteration",
+            "content": "Learn usability testing methodologies, analyze results, and iterate on designs based on feedback.dsa dafsfdsfds",
+            "subtopics": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ai-ml",
+    "title": "AI & Machine Learning",
+    "icon": "🤖",
+    "description": "Artificial intelligence and ML models",
+    "subtopics": [
+      {
+        "id": "fundamentals",
+        "title": "ML Fundamentals",
+        "icon": "📊",
+        "description": "Core ML concepts",
+        "subtopics": [
+          {
+            "id": "supervised",
+            "title": "Supervised Learning",
+            "icon": "📈",
+            "description": "Classification and regression",
+            "content": "Understand supervised learning algorithms, training, validation, and model evaluation techniques."
+          },
+          {
+            "id": "unsupervised",
+            "title": "Unsupervised Learning",
+            "icon": "🎯",
+            "description": "Clustering and patterns",
+            "content": "Explore clustering algorithms, dimensionality reduction, and pattern discovery in data."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "node-1767004081500-iiieeqs72",
+    "title": "LinkedList",
+    "icon": "Linked List",
+    "description": "LinkedLiist",
+    "content": "Linstkenlk",
+    "subtopics": [
+      {
+        "id": "node-1767497492190-rlni1pnmg",
+        "title": "AA",
+        "icon": "AA",
+        "description": "AA```",
+        "content": "AA",
+        "subtopics": [],
+        "sections": [
+          {
+            "id": "section-1767507874823-336bm5ad7",
+            "label": "Demo",
+            "icon": "Demo",
+            "slug": "d",
+            "content": "Demo"
+          }
+        ]
+      },
+      {
+        "id": "node-1767497512556-f6i5kqdpc",
+        "title": "AA`",
+        "icon": "AA",
+        "description": "SS",
+        "content": "aa",
+        "subtopics": []
+      }
+    ]
+  }
+]

@@ -15,6 +15,7 @@ export default function CustomCursor() {
   // Check if we're on train-of-thoughts pages
   const isTrainOfThoughts = pathname?.startsWith("/train-of-thoughts")
   const isBlogPost = pathname?.match(/^\/train-of-thoughts\/[^/]+$/)
+  const isLearnWithMe = pathname?.startsWith("/learn-with-me")
 
   useEffect(() => {
     const mouseMove = (e: MouseEvent) => {
@@ -28,7 +29,19 @@ export default function CustomCursor() {
       const scrollY = window.scrollY
       const windowHeight = window.innerHeight
 
-      if (isBlogPost) {
+      if (isLearnWithMe) {
+        // Custom text for learn-with-me page
+        if (scrollY < windowHeight * 0.3) {
+          setCursorText("EXPLORE TOPICS ")
+          setCursorVariant("text")
+        } else if (scrollY < windowHeight * 1.5) {
+          setCursorText("CLICK TO LEARN ")
+          setCursorVariant("text")
+        } else {
+          setCursorText("DIVE DEEPER ")
+          setCursorVariant("text")
+        }
+      } else if (isBlogPost) {
         // Custom text for individual blog post pages
         if (scrollY < windowHeight * 0.3) {
           setCursorText("SCROLL TO READ ")
@@ -85,6 +98,8 @@ export default function CustomCursor() {
     const blogPostCards = document.querySelectorAll('article[class*="cursor-pointer"]')
     const relatedPostCards = document.querySelectorAll('[class*="related-post"]')
     const categoryButtons = document.querySelectorAll('button[class*="rounded-lg"]')
+    const flowmapNodes = document.querySelectorAll('.flowmap-node')
+    const flowmapButtons = document.querySelectorAll('button[class*="rounded-lg"]')
     
     // Event listeners for portfolio cards
     timelineCards.forEach(card => {
@@ -120,6 +135,33 @@ export default function CustomCursor() {
       categoryButtons.forEach(button => {
         button.addEventListener('mouseenter', () => {
           setCursorText("FILTER BY ")
+        })
+        button.addEventListener('mouseleave', handleMouseLeaveCard)
+      })
+    }
+
+    // Event listeners for flowmap nodes (learn-with-me page)
+    if (isLearnWithMe) {
+      flowmapNodes.forEach(node => {
+        node.addEventListener('mouseenter', () => {
+          setIsHovering(true)
+          setCursorText("EXPLORE NODE ")
+        })
+        node.addEventListener('mouseleave', handleMouseLeaveCard)
+      })
+
+      flowmapButtons.forEach(button => {
+        button.addEventListener('mouseenter', () => {
+          const buttonText = button.textContent?.toLowerCase() || ""
+          if (buttonText.includes('edit')) {
+            setCursorText("EDIT MODE ")
+          } else if (buttonText.includes('save')) {
+            setCursorText("SAVE CHANGES ")
+          } else if (buttonText.includes('add')) {
+            setCursorText("ADD NODE ")
+          } else {
+            setCursorText("CLICK ")
+          }
         })
         button.addEventListener('mouseleave', handleMouseLeaveCard)
       })
@@ -181,10 +223,34 @@ export default function CustomCursor() {
         button.removeEventListener('mouseleave', handleMouseLeaveCard)
       })
 
+      flowmapNodes.forEach(node => {
+        node.removeEventListener('mouseenter', () => {
+          setIsHovering(true)
+          setCursorText("EXPLORE NODE ")
+        })
+        node.removeEventListener('mouseleave', handleMouseLeaveCard)
+      })
+
+      flowmapButtons.forEach(button => {
+        button.removeEventListener('mouseenter', () => {
+          const buttonText = button.textContent?.toLowerCase() || ""
+          if (buttonText.includes('edit')) {
+            setCursorText("EDIT MODE ")
+          } else if (buttonText.includes('save')) {
+            setCursorText("SAVE CHANGES ")
+          } else if (buttonText.includes('add')) {
+            setCursorText("ADD NODE ")
+          } else {
+            setCursorText("CLICK ")
+          }
+        })
+        button.removeEventListener('mouseleave', handleMouseLeaveCard)
+      })
+
       window.removeEventListener("modalOpen", handleModalOpen as EventListener)
       window.removeEventListener("modalClose", handleModalClose as EventListener)
     }
-  }, [isTrainOfThoughts, isBlogPost])
+  }, [isTrainOfThoughts, isBlogPost, isLearnWithMe])
 
   // Function to create circular text with each letter facing the center
   const createCircularText = (text: string) => {
@@ -228,7 +294,7 @@ export default function CustomCursor() {
       {/* Main cursor dot */}
       <motion.div
         className="pointer-events-none fixed left-0 top-0 flex items-center justify-center rounded-full bg-[#FF8000]"
-        style={{ zIndex: isModalOpen ? 1000 : 50 }}
+        style={{ zIndex: isModalOpen ? 10000 : 50 }}
         animate={{
           x: mousePosition.x - 10,
           y: mousePosition.y - 10,
@@ -247,7 +313,7 @@ export default function CustomCursor() {
       {cursorVariant === "text" && (
         <motion.div
           className="pointer-events-none fixed left-0 top-0 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-sm"
-          style={{ zIndex: isModalOpen ? 500 : 39 }}
+          style={{ zIndex: isModalOpen ? 9999 : 39 }}
           animate={{
             x: mousePosition.x - 40,
             y: mousePosition.y - 40,
@@ -265,7 +331,7 @@ export default function CustomCursor() {
       {cursorVariant === "text" && (
         <motion.div
           className="pointer-events-none fixed left-0 top-0 flex h-0 w-0 items-center justify-center"
-          style={{ zIndex: isModalOpen ? 999 : 40 }}
+          style={{ zIndex: isModalOpen ? 9998 : 40 }}
           animate={{
             x: mousePosition.x,
             y: mousePosition.y,

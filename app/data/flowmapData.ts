@@ -226,3 +226,24 @@ export function generateSlug(title: string): string {
     .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
 }
 
+// Regenerate all section slugs across all topics recursively
+export function regenerateAllSectionSlugs(topics: Topic[]): Topic[] {
+  return topics.map((topic) => {
+    // Process sections for current topic
+    const updatedSections = topic.sections?.map((section) => ({
+      ...section,
+      slug: generateSlug(section.label),
+    }))
+
+    // Process subtopics recursively
+    const updatedSubtopics = topic.subtopics
+      ? regenerateAllSectionSlugs(topic.subtopics)
+      : topic.subtopics
+
+    return {
+      ...topic,
+      sections: updatedSections,
+      subtopics: updatedSubtopics,
+    }
+  })
+}

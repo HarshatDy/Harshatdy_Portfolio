@@ -5,15 +5,7 @@ import { ArrowRight, GripVertical, MoreVertical } from "lucide-react"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { useState, useRef, useEffect } from "react"
-
-interface Topic {
-  id: string
-  title: string
-  icon: string
-  description?: string
-  subtopics?: any[]
-  content?: string
-}
+import type { Topic } from "@/app/data/flowmapData"
 
 interface FlowNodeProps {
   topic: Topic

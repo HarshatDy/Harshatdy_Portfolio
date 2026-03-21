@@ -1,18 +1,16 @@
 import Hero from "@/components/hero"
 import Timeline from "@/components/timeline"
 import PortfolioGrid from "@/components/portfolio-grid"
-import CustomCursor from "@/components/custom-cursor"
 import Footer from "@/components/footer"
 import StickyThoughtsButton from "@/components/sticky-thoughts-button"
-import LearnButton from "@/components/learn-button"
+import NavLinks from "@/components/nav-links"
 import Experience from "@/components/experience"
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
-      <CustomCursor />
       <StickyThoughtsButton />
-      <LearnButton />
+      <NavLinks />
       <Hero />
       <Experience />
       <Timeline />

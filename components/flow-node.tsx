@@ -13,6 +13,7 @@ interface Topic {
   description?: string
   subtopics?: any[]
   content?: string
+  slug?: string
 }
 
 interface FlowNodeProps {

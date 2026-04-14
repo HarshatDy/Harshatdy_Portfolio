@@ -5,7 +5,6 @@ import Footer from "@/components/footer"
 import StickyThoughtsButton from "@/components/sticky-thoughts-button"
 
 import NavLinks from "@/components/nav-links"
-import Experience from "@/components/experience"
 
 export default function Home() {
   return (

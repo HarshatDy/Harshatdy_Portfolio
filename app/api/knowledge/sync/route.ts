@@ -4,7 +4,7 @@ import { fetchDomainPages } from '@/lib/services/notion'
 import { upsertNotionPages } from '@/lib/db/queries/knowledge'
 import type { Domain } from '@/app/data/types/newsletter'
 
-const ALL_DOMAINS: Domain[] = ['platform', 'cpp', 'os', '5g', 'finance']
+const ALL_DOMAINS: Domain[] = ['platform', 'cpp', 'os', '5g', 'finance', 'graphs and algorithms', 'python', 'advanced dsa', 'advanced multithreading']
 
 export async function POST(request: Request) {
   if (!validateCronSecret(request)) return cronUnauthorized()

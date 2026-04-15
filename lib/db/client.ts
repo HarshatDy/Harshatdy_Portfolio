@@ -10,5 +10,10 @@ if (!supabaseUrl || !supabaseServiceKey) {
 // Server-only Supabase client using service role key.
 // Never import this in "use client" components.
 export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: { persistSession: true },
+  auth: { persistSession: false, autoRefreshToken: false },
+  global: {
+    // Disable Next.js fetch cache for all Supabase queries — without this,
+    // Next.js caches the first response and ignores subsequent DB writes.
+    fetch: (url, options) => fetch(url, { ...options, cache: 'no-store' }),
+  },
 })

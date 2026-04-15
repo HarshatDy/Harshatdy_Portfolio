@@ -13,6 +13,10 @@ function getDomainRootPageId(domain: Domain): string | null {
     os: process.env.NOTION_OS_ROOT_PAGE_ID,
     '5g': process.env.NOTION_5G_ROOT_PAGE_ID,
     finance: process.env.NOTION_FINANCE_ROOT_PAGE_ID,
+    'graphs and algorithms': process.env.NOTION_GRAPHS_AND_ALGORITHMS_ROOT_PAGE_ID,
+    python: process.env.NOTION_PYTHON_ROOT_PAGE_ID,
+    'advanced dsa': process.env.NOTION_ADVANCED_DSA_ROOT_PAGE_ID,
+    'advanced multithreading': process.env.NOTION_ADVANCED_MULTITHREADING_ROOT_PAGE_ID,
   }
   return map[domain] ?? null
 }
@@ -96,7 +100,7 @@ async function fetchPageTree(
     parentPageId,
     title,
     icon,
-    slug: slugify(title),
+    slug: `${slugify(title)}-${pageId.replace(/-/g, '').slice(0, 6)}`,
     depth,
     sortOrder: 0,
     blocks: contentBlocks,

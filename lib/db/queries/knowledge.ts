@@ -38,9 +38,10 @@ export async function getPagesByDomain(domain: Domain): Promise<KBNode[]> {
 export async function getAllPages(): Promise<KBNode[]> {
   const { data, error } = await supabase
     .from('notion_pages')
-    .select('id, notion_page_id, parent_id, domain, title, slug, icon, depth, sort_order, last_synced_at')
+    .select('id, notion_page_id, parent_id, domain, title, slug, icon, content_html, depth, sort_order, last_synced_at')
     .order('depth')
     .order('sort_order')
+    // .select('*')
 
   if (error) throw new Error(`getAllPages: ${error.message}`)
   return (data ?? []) as KBNode[]

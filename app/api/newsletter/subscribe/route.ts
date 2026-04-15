@@ -4,7 +4,7 @@ import { sendVerificationEmail } from '@/lib/services/gmail'
 import { generateToken, tokenExpiry } from '@/lib/utils/emailToken'
 import type { Domain } from '@/app/data/types/newsletter'
 
-const VALID_DOMAINS: Domain[] = ['platform', 'cpp', 'os', '5g', 'finance']
+const VALID_DOMAINS: Domain[] = ['platform', 'cpp', 'os', '5g', 'finance', 'graphs and algorithms', 'python', 'advanced dsa', 'advanced multithreading']
 
 export async function POST(request: Request) {
   try {

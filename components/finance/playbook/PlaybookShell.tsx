@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react'
+import type { ComponentType } from 'react'
 import { motion } from 'framer-motion'
 import Overview from './sections/Overview'
 import MarketPrinciples from './sections/MarketPrinciples'
@@ -24,7 +25,7 @@ const TABS = [
 
 type TabId = (typeof TABS)[number]['id']
 
-const SECTION_MAP: Record<TabId, React.ComponentType> = {
+const SECTION_MAP: Record<TabId, ComponentType> = {
   overview: Overview,
   principles: MarketPrinciples,
   indicators: Indicators,

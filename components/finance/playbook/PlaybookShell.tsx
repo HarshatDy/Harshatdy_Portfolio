@@ -44,7 +44,7 @@ export default function PlaybookShell() {
     <div className="space-y-0">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-white text-3xl font-bold tracking-tight font-serif">NSE 100 Swing Trading</h1>
+        <h1 className="text-white text-3xl font-bold tracking-tight">NSE 100 Swing Trading</h1>
         <p className="text-zinc-500 text-sm mt-1">A complete framework for 10% weekly profit targets — built on decades of market expert consensus</p>
       </div>
 

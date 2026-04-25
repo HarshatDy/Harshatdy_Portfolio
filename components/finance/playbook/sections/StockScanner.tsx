@@ -1,4 +1,17 @@
 // components/finance/playbook/sections/StockScanner.tsx
+
+function ChecklistItem({ n, title, body }: { n: number; title: string; body: string }) {
+  return (
+    <div className="flex gap-3 py-3 border-b border-zinc-800/50 last:border-0">
+      <div className="w-6 h-6 rounded-full bg-[#FF8000]/10 text-[#FF8000] text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{n}</div>
+      <div>
+        <div className="text-white text-sm font-semibold">{title}</div>
+        <div className="text-zinc-400 text-xs mt-1 leading-relaxed">{body}</div>
+      </div>
+    </div>
+  )
+}
+
 export default function StockScanner() {
   const stage1 = [
     { n: 1, title: 'Market Condition Check', body: 'Nifty 50: above 200 DMA? India VIX below 20? FII data from NSE: net buyers or sellers this week? If all bad — no trading today, wait.' },
@@ -34,18 +47,6 @@ export default function StockScanner() {
     'Breakdown below key EMA — exit regardless of P&L',
   ]
 
-  function ChecklistItem({ n, title, body }: { n: number; title: string; body: string }) {
-    return (
-      <div className="flex gap-3 py-3 border-b border-zinc-800/50 last:border-0">
-        <div className="w-6 h-6 rounded-full bg-[#FF8000]/10 text-[#FF8000] text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{n}</div>
-        <div>
-          <div className="text-white text-sm font-semibold">{title}</div>
-          <div className="text-zinc-400 text-xs mt-1 leading-relaxed">{body}</div>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="space-y-6">
       <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
@@ -62,7 +63,7 @@ export default function StockScanner() {
         <h3 className="text-[#FF8000] text-xs font-bold uppercase tracking-widest mb-4">Stage 3 — Entry Execution Criteria</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-green-950/30 border border-green-900/40 rounded-lg p-4">
-            <div className="text-green-400 text-xs font-bold uppercase tracking-widest mb-3">Entry Triggers (All 3 Preferred)</div>
+            <div className="text-green-400 text-xs font-bold uppercase tracking-widest mb-3">Entry Triggers (All 4 Preferred)</div>
             <div className="space-y-2">
               {entryTriggers.map((t) => <div key={t} className="text-zinc-300 text-xs flex gap-2"><span className="text-green-400 flex-shrink-0">✓</span>{t}</div>)}
               <div className="text-green-400 text-xs mt-3">Enter at open next day after breakout close, or on same-day close</div>

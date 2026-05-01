@@ -109,12 +109,75 @@ Return a JSON object (no markdown) in exactly this format:
   })
 
   const rawText = response.content[0].type === 'text' ? response.content[0].text : '{}'
+  const cleaned = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim()
   let analyses: StockAnalysisResult['analyses'] = {}
   try {
-    analyses = JSON.parse(rawText)
-  } catch {
-    // If parsing fails, return empty analyses rather than crashing
-    analyses = {}
+    analyses = JSON.parse(cleaned)
+  } catch (err) {
+    console.error('[analyzeStocks] JSON parse failed. Raw response:', rawText, err)
+  }
+
+  return {
+    analyses,
+    tokensUsed: response.usage.input_tokens + response.usage.output_tokens,
+  }
+}
+
+import type { IndiaStockAnalysisResult } from '@/app/data/types/indiaFinance'
+
+/**
+ * Generate target price, upside %, and rationale for multiple Indian stocks
+ * in a single batched Claude Haiku call.
+ */
+export async function analyzeIndiaStocks(
+  stocksData: Array<{
+    ticker: string
+    name: string
+    currentPrice: number
+    score: number
+    signal: 'BUY' | 'HOLD' | 'SELL'
+    prices7d: number[]
+  }>,
+): Promise<IndiaStockAnalysisResult> {
+  if (stocksData.length === 0) return { analyses: {}, tokensUsed: 0 }
+
+  const dataStr = stocksData
+    .map((s) => {
+      const priceList = s.prices7d.slice(0, 7).join(', ')
+      return `${s.ticker} (${s.name}): currentPrice=₹${s.currentPrice}, score=${s.score}, signal=${s.signal}, 7d_prices=[${priceList}]`
+    })
+    .join('\n')
+
+  const prompt = `You are a financial analyst specialising in Indian equities (NSE/BSE).
+Analyse each stock below and return a JSON object with your assessment.
+
+Stock data (prices in INR, newest first):
+${dataStr}
+
+Return a JSON object (no markdown, no explanation) in exactly this format:
+{
+  "TICKER": {
+    "rationale": "1-2 sentence rationale referencing price action and signal",
+    "target_price": <number — realistic 3-month target in INR>,
+    "upside_pct": <number — percent upside from current price, can be negative>
+  }
+}
+
+Include every ticker listed above. Be concise and data-driven.`
+
+  const response = await client.messages.create({
+    model: MODEL,
+    max_tokens: 2500,
+    messages: [{ role: 'user', content: prompt }],
+  })
+
+  const rawText = response.content[0].type === 'text' ? response.content[0].text : '{}'
+  const cleaned = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim()
+  let analyses: IndiaStockAnalysisResult['analyses'] = {}
+  try {
+    analyses = JSON.parse(cleaned)
+  } catch (err) {
+    console.error('[analyzeIndiaStocks] JSON parse failed. Raw response:', rawText, err)
   }
 
   return {

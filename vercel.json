@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/finance/india/fetch?slot=open",
+      "schedule": "0 4 * * 1-5"
+    },
+    {
+      "path": "/api/finance/india/fetch?slot=midday",
+      "schedule": "0 7 * * 1-5"
+    },
+    {
+      "path": "/api/finance/india/fetch?slot=close",
+      "schedule": "30 10 * * 1-5"
+    }
+  ]
+}

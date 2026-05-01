@@ -1,0 +1,883 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d0f;--bg2:#141418;--bg3:#1c1c22;--bg4:#242430;
+  --border:#2a2a36;--border2:#3a3a4a;
+  --text:#e8e6f0;--text2:#a8a4bc;--text3:#6b6782;
+  --gold:#f0b429;--gold2:#e8960a;--teal:#2dd4bf;--teal2:#14b8a6;
+  --red:#f87171;--green:#4ade80;--blue:#60a5fa;--purple:#a78bfa;
+  --accent:#f0b429;
+  --radius:10px;--radius-sm:6px;
+}
+
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;}
+
+.nav{display:flex;gap:4px;padding:16px 20px 0;flex-wrap:wrap;border-bottom:1px solid var(--border);background:var(--bg);}
+.nav-btn{background:none;border:none;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:8px 14px;border-radius:var(--radius-sm) var(--radius-sm) 0 0;cursor:pointer;transition:all .2s;border:1px solid transparent;border-bottom:none;letter-spacing:.03em;text-transform:uppercase;}
+.nav-btn:hover{color:var(--text2);background:var(--bg3);}
+.nav-btn.active{color:var(--gold);background:var(--bg2);border-color:var(--border);border-bottom-color:var(--bg2);}
+
+.page{display:none;padding:24px 20px;max-width:100%;}
+.page.active{display:block;}
+
+h1{font-family:'DM Serif Display',serif;font-size:28px;color:var(--text);margin-bottom:4px;font-weight:400;}
+h2{font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);margin-bottom:12px;font-weight:400;}
+h3{font-size:13px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+.subtitle{color:var(--text3);font-size:13px;margin-bottom:24px;}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:20px;}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:16px;}
+.card-sm{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;}
+.card-gold{border-color:rgba(240,180,41,.3);}
+
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em;}
+.tag-buy{background:rgba(74,222,128,.12);color:var(--green);border:1px solid rgba(74,222,128,.2);}
+.tag-sell{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.2);}
+.tag-neutral{background:rgba(167,139,250,.12);color:var(--purple);border:1px solid rgba(167,139,250,.2);}
+.tag-alert{background:rgba(240,180,41,.12);color:var(--gold);border:1px solid rgba(240,180,41,.2);}
+
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px;}
+.big-num{font-family:'DM Serif Display',serif;font-size:32px;color:var(--gold);line-height:1;}
+.stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-top:4px;}
+
+.pill-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;}
+.pill{background:var(--bg3);border:1px solid var(--border);border-radius:20px;font-size:12px;padding:4px 12px;color:var(--text2);}
+.pill-active{background:rgba(240,180,41,.1);border-color:rgba(240,180,41,.35);color:var(--gold);}
+
+.timeline{position:relative;padding-left:20px;}
+.timeline::before{content:'';position:absolute;left:4px;top:4px;bottom:0;width:1px;background:var(--border);}
+.tl-item{position:relative;margin-bottom:16px;}
+.tl-dot{position:absolute;left:-20px;top:4px;width:9px;height:9px;border-radius:50%;background:var(--gold);border:2px solid var(--bg);}
+.tl-title{font-weight:600;font-size:13px;color:var(--text);margin-bottom:2px;}
+.tl-body{font-size:12px;color:var(--text2);}
+
+.rule-box{background:var(--bg3);border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:12px 16px;margin:10px 0;font-size:13px;color:var(--text2);}
+.rule-box strong{color:var(--text);}
+
+table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
+table.data-table th{text-align:left;padding:8px 12px;color:var(--text3);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);}
+table.data-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text2);}
+table.data-table tr:hover td{background:var(--bg3);}
+table.data-table td:first-child{color:var(--text);font-weight:500;}
+
+.signal-bar{height:4px;border-radius:2px;margin-top:6px;}
+.indicator-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;cursor:pointer;transition:border-color .2s;}
+.indicator-card:hover{border-color:var(--border2);}
+.indicator-card.selected{border-color:rgba(240,180,41,.5);background:rgba(240,180,41,.05);}
+.indicator-name{font-weight:600;font-size:13px;color:var(--text);}
+.indicator-cat{font-size:11px;color:var(--text3);margin-top:2px;}
+
+#detail-panel{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-top:16px;min-height:160px;}
+
+.checklist-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.checklist-item:last-child{border-bottom:none;}
+.check-num{background:rgba(240,180,41,.12);color:var(--gold);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.check-title{font-weight:600;font-size:13px;color:var(--text);}
+.check-body{font-size:12px;color:var(--text2);margin-top:2px;}
+
+.algo-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:16px;cursor:pointer;transition:all .2s;}
+.algo-card:hover{border-color:var(--gold);transform:translateY(-1px);}
+.algo-title{font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;}
+.algo-type{font-size:11px;color:var(--text3);margin-bottom:8px;}
+.algo-detail{font-size:12px;color:var(--text2);line-height:1.5;display:none;}
+.algo-card.open .algo-detail{display:block;}
+
+.risk-meter{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden;margin:6px 0;}
+.risk-fill{height:100%;border-radius:4px;}
+
+.formula-block{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal);margin:8px 0;line-height:1.8;}
+
+.week-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0;}
+.day-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center;}
+.day-name{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+.day-action{font-size:12px;color:var(--text2);margin-top:4px;}
+
+.badge{display:inline-flex;align-items:center;gap:4px;background:rgba(240,180,41,.08);border:1px solid rgba(240,180,41,.2);color:var(--gold);border-radius:4px;font-size:11px;font-weight:600;padding:3px 8px;margin:2px;}
+
+.sector-bar{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:12px;}
+.sector-name{width:120px;color:var(--text2);flex-shrink:0;}
+.sector-track{flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;}
+.sector-fill{height:100%;border-radius:3px;background:var(--teal);}
+.sector-pct{width:36px;text-align:right;color:var(--text3);}
+
+.scroll-box{max-height:320px;overflow-y:auto;padding-right:4px;}
+.scroll-box::-webkit-scrollbar{width:3px;}
+.scroll-box::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+.entry-exit-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.entry-box{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.15);border-radius:var(--radius-sm);padding:14px;}
+.exit-box{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.15);border-radius:var(--radius-sm);padding:14px;}
+.entry-title{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.exit-title{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+
+.separator{height:1px;background:var(--border);margin:20px 0;}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showPage('home')">Overview</button>
+  <button class="nav-btn" onclick="showPage('fundamentals')">Market Principles</button>
+  <button class="nav-btn" onclick="showPage('indicators')">Indicators</button>
+  <button class="nav-btn" onclick="showPage('algorithms')">Algorithms</button>
+  <button class="nav-btn" onclick="showPage('scanner')">Stock Scanner</button>
+  <button class="nav-btn" onclick="showPage('riskmanagement')">Risk & Money</button>
+  <button class="nav-btn" onclick="showPage('psychology')">Psychology</button>
+  <button class="nav-btn" onclick="showPage('playbook')">Weekly Playbook</button>
+</div>
+
+<!-- ============ HOME ============ -->
+<div id="page-home" class="page active">
+  <h1>NSE 100 Swing Trading</h1>
+  <p class="subtitle">A complete framework for 10% weekly profit targets — built on decades of market expert consensus</p>
+
+  <div class="grid-4">
+    <div class="card-sm card-gold">
+      <div class="big-num">10%</div>
+      <div class="stat-label">Weekly profit target</div>
+    </div>
+    <div class="card-sm">
+      <div class="big-num" style="color:var(--teal)">2–7</div>
+      <div class="stat-label">Days avg hold time</div>
+    </div>
+    <div class="card-sm">
+      <div class="big-num" style="color:var(--green)">3:1</div>
+      <div class="stat-label">Reward-to-risk ratio</div>
+    </div>
+    <div class="card-sm">
+      <div class="big-num" style="color:var(--purple)">2%</div>
+      <div class="stat-label">Max risk per trade</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>What is Swing Trading?</h3>
+      <p style="color:var(--text2);font-size:13px;line-height:1.7;">Swing trading captures "swings" — price moves within a larger trend. Unlike day trading (exits same day) or investing (months/years), swing trading holds for 2–7 days, catching the meat of a price move. In NSE 100 stocks, a 10% move per week is achievable but requires strict discipline. You are exploiting short-term momentum, breakouts, or mean-reversion patterns.</p>
+      <div class="separator" style="margin:14px 0;"></div>
+      <h3>The 10% Reality Check</h3>
+      <p style="color:var(--text2);font-size:13px;line-height:1.7;">10% per week compounded = 142x annually. This is not realistic every single week. <strong style="color:var(--gold)">Target 3–4 qualifying trades monthly</strong>, not every week. Professionals aim for 40–60% annual returns. A 10% target means you find one exceptional setup per week, not that every trade hits 10%.</p>
+    </div>
+    <div class="card">
+      <h3>The 5-Layer Framework</h3>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--purple)"></div>
+          <div class="tl-title">1. Market Context</div>
+          <div class="tl-body">Is Nifty trending? Sector rotation? Macro events?</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--blue)"></div>
+          <div class="tl-title">2. Stock Selection</div>
+          <div class="tl-body">Filter NSE 100 by momentum, volume, relative strength</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--teal)"></div>
+          <div class="tl-title">3. Chart Analysis</div>
+          <div class="tl-body">Pattern + indicator confluence at key price levels</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--gold)"></div>
+          <div class="tl-title">4. Entry Execution</div>
+          <div class="tl-body">Trigger candles, precise entry, stop placement</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--green)"></div>
+          <div class="tl-title">5. Trade Management</div>
+          <div class="tl-body">Trailing stop, partial profit, full exit rules</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Expert Consensus — What Actually Works</h3>
+    <div class="grid-3" style="margin-top:10px;">
+      <div>
+        <div class="badge">Mark Minervini</div>
+        <p style="font-size:12px;color:var(--text2);margin-top:6px;">SEPA methodology — buy fundamentally strong stocks at precise technical breakouts with tight stops. 97% win rate years proved it's about <em>quality of setup</em>, not frequency.</p>
+      </div>
+      <div>
+        <div class="badge">William O'Neil</div>
+        <p style="font-size:12px;color:var(--text2);margin-top:6px;">CAN SLIM — buy stocks with strong earnings, new highs, institutional buying, and market follow-through days. Cup-with-handle and flat base patterns remain the most reliable breakout setups.</p>
+      </div>
+      <div>
+        <div class="badge">Stan Weinstein</div>
+        <p style="font-size:12px;color:var(--text2);margin-top:6px;">Stage Analysis — only buy in Stage 2 (advancing), never in Stage 1 (basing), never in Stage 3 (topping), never in Stage 4 (declining). Simple but almost never violated by pros.</p>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:4px;">
+      <div>
+        <div class="badge">Nicolas Darvas</div>
+        <p style="font-size:12px;color:var(--text2);margin-top:6px;">Buy breakouts from "boxes" (tight consolidation ranges) with expanding volume. Works exceptionally well on NSE mid and large caps during trending markets.</p>
+      </div>
+      <div>
+        <div class="badge">Richard Dennis</div>
+        <p style="font-size:12px;color:var(--text2);margin-top:6px;">Turtle trading rules — trend following with defined entry/exit rules removes emotion. The system wins by cutting losses ruthlessly and letting winners run.</p>
+      </div>
+      <div>
+        <div class="badge">IBD Methodology</div>
+        <p style="font-size:12px;color:var(--text2);margin-top:6px;">Relative Strength Rank, Earnings growth, and institutional accumulation are the three pillars. Applied to NSE 100: focus on stocks where FII/DII are actively accumulating.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FUNDAMENTALS ============ -->
+<div id="page-fundamentals" class="page">
+  <h2>Market Principles</h2>
+  <p class="subtitle">Core principles every swing trader must internalize before executing a single trade</p>
+
+  <div class="card">
+    <h3>Principle 1 — Market Hierarchy (Always Trade With, Never Against)</h3>
+    <div class="rule-box">
+      <strong>Nifty 50 trend → Nifty 100 sector → Individual stock direction.</strong> A stock in a bearish market that looks bullish will usually fail. Confirm the macro first.
+    </div>
+    <div class="grid-3" style="margin-top:12px;">
+      <div class="card-sm">
+        <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Bull Market Rules</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;">Buy breakouts aggressively. Shallow dips are buying opportunities. Add to winners. Nifty above 200 DMA with rising slope.</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Sideways/Choppy</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;">Reduce position size. Trade only the clearest setups. Nifty between key MAs, no clear direction. Mean reversion better than breakouts.</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Bear Market Rules</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;">Drastically reduce exposure. Fewer trades. Cash is a position. Only short-side or wait. Nifty below 200 DMA, falling slope.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Principle 2 — Price & Volume: The Only Truth</h3>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:10px;">Price is the ultimate indicator. Volume confirms intention. Every other indicator is derived from these two. Richard Wyckoff built an entire school of thought (Wyckoff Method) solely on price-volume relationships.</p>
+    <div class="grid-2">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:6px;">Bullish Volume Signals</div>
+        <div class="rule-box" style="border-color:var(--green);">Breakout on 2x+ average volume = institutional buying (Accumulation)</div>
+        <div class="rule-box" style="border-color:var(--green);">Price rising, volume rising = healthy uptrend</div>
+        <div class="rule-box" style="border-color:var(--green);">Price dips on low volume = weak selling, hold</div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--red);margin-bottom:6px;">Bearish Volume Signals</div>
+        <div class="rule-box" style="border-color:var(--red);">Price rising on declining volume = exhaustion, exit soon</div>
+        <div class="rule-box" style="border-color:var(--red);">Breakdown on heavy volume = Distribution, get out</div>
+        <div class="rule-box" style="border-color:var(--red);">High volume at resistance with little progress = sellers absorbing buyers</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Principle 3 — Support, Resistance & Structure</h3>
+    <div class="grid-2">
+      <div>
+        <p style="color:var(--text2);font-size:13px;margin-bottom:10px;">Price remembers. Support and resistance are areas where buyers/sellers have previously congregated. The more times a level is tested, the more significant the eventual break.</p>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+          <div style="margin-bottom:6px;"><span style="color:var(--gold)">▸</span> <strong style="color:var(--text)">Previous highs become resistance</strong> — sellers who are trapped at these levels sell when price returns</div>
+          <div style="margin-bottom:6px;"><span style="color:var(--gold)">▸</span> <strong style="color:var(--text)">Broken resistance becomes support</strong> — old sellers become new buyers (flip of polarity)</div>
+          <div style="margin-bottom:6px;"><span style="color:var(--gold)">▸</span> <strong style="color:var(--text)">Round numbers (1000, 2500, 500)</strong> — psychological levels with huge option OI</div>
+          <div><span style="color:var(--gold)">▸</span> <strong style="color:var(--text)">52-week highs</strong> — NSE stocks that break 52W high with volume go up avg 15–25% more</div>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:10px;">Nifty 100 Sector Weightages</h3>
+        <div class="sector-bar"><span class="sector-name">Financial Services</span><div class="sector-track"><div class="sector-fill" style="width:36%"></div></div><span class="sector-pct">36%</span></div>
+        <div class="sector-bar"><span class="sector-name">IT & Tech</span><div class="sector-track"><div class="sector-fill" style="width:15%"></div></div><span class="sector-pct">15%</span></div>
+        <div class="sector-bar"><span class="sector-name">Oil & Gas</span><div class="sector-track"><div class="sector-fill" style="width:12%"></div></div><span class="sector-pct">12%</span></div>
+        <div class="sector-bar"><span class="sector-name">Consumer Goods</span><div class="sector-track"><div class="sector-fill" style="width:10%"></div></div><span class="sector-pct">10%</span></div>
+        <div class="sector-bar"><span class="sector-name">Pharma & Health</span><div class="sector-track"><div class="sector-fill" style="width:8%"></div></div><span class="sector-pct">8%</span></div>
+        <div class="sector-bar"><span class="sector-name">Automobiles</span><div class="sector-track"><div class="sector-fill" style="width:6%"></div></div><span class="sector-pct">6%</span></div>
+        <div class="sector-bar"><span class="sector-name">Metals</span><div class="sector-track"><div class="sector-fill" style="width:5%"></div></div><span class="sector-pct">5%</span></div>
+        <div class="sector-bar"><span class="sector-name">Others</span><div class="sector-track"><div class="sector-fill" style="width:8%"></div></div><span class="sector-pct">8%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Principle 4 — Trend Phases (Dow Theory + Weinstein Stages)</h3>
+    <div class="grid-4">
+      <div class="card-sm">
+        <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">STAGE 1 — BASING</div>
+        <div style="font-size:12px;color:var(--text2);">Price sideways, 30W MA flat. Institutions quietly accumulating. Do NOT buy yet. Watch for breakout.</div>
+      </div>
+      <div class="card-sm" style="border-color:rgba(74,222,128,.25);">
+        <div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px;">STAGE 2 — ADVANCING ✓</div>
+        <div style="font-size:12px;color:var(--text2);">Price above rising 30W MA. Higher highs, higher lows. <strong style="color:var(--green)">Buy here</strong>. Add on pullbacks to MA.</div>
+      </div>
+      <div class="card-sm" style="border-color:rgba(240,180,41,.25);">
+        <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:4px;">STAGE 3 — TOPPING</div>
+        <div style="font-size:12px;color:var(--text2);">Price churning at highs, 30W MA flattening. Distribution by institutions. Exit positions.</div>
+      </div>
+      <div class="card-sm" style="border-color:rgba(248,113,113,.25);">
+        <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:4px;">STAGE 4 — DECLINING</div>
+        <div style="font-size:12px;color:var(--text2);">Price below falling 30W MA. Lower highs, lower lows. Never buy. Short only if experienced.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Principle 5 — Indian Market Specifics</h3>
+    <div class="grid-2">
+      <div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+          <div style="margin-bottom:8px;"><span style="color:var(--teal)">◆</span> <strong style="color:var(--text)">FII/DII Data</strong> — Check SEBI FII/DII daily data. FII buying = bullish fuel. FII selling = exit signal. Available on NSE website daily.</div>
+          <div style="margin-bottom:8px;"><span style="color:var(--teal)">◆</span> <strong style="color:var(--text)">India VIX</strong> — Volatility index. Above 20 = dangerous for swings, reduce position. Below 15 = calm market, normal sizing. Between 15–20 = standard conditions.</div>
+          <div style="margin-bottom:8px;"><span style="color:var(--teal)">◆</span> <strong style="color:var(--text)">NSE Option Chain</strong> — PCR (Put-Call Ratio) above 1.2 = bullish. Below 0.8 = bearish. Max Pain level = price will gravitate to at expiry.</div>
+          <div><span style="color:var(--teal)">◆</span> <strong style="color:var(--text)">Expiry Effect</strong> — Weekly expiry Thursday causes volatility. Avoid new entries on Weds/Thurs unless clear setup.</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+          <div style="margin-bottom:8px;"><span style="color:var(--purple)">◆</span> <strong style="color:var(--text)">Budget / Result Season</strong> — Q1 results (Jul-Aug), Q2 (Oct-Nov), Q3 (Jan-Feb), Q4 (Apr-May). Stocks move 10–30% on results. Don't hold over unknown results unless you've modeled the trade.</div>
+          <div style="margin-bottom:8px;"><span style="color:var(--purple)">◆</span> <strong style="color:var(--text)">RBI Policy</strong> — Bi-monthly MPC meetings. Rate changes affect banking, NBFC, real estate stocks significantly. Mark these dates.</div>
+          <div><span style="color:var(--purple)">◆</span> <strong style="color:var(--text)">US Market Correlation</strong> — Nifty has ~0.6 correlation with S&P 500. Global sell-offs drag NSE down regardless of domestic fundamentals. Check SGX Nifty / Gift Nifty pre-market for indication.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ INDICATORS ============ -->
+<div id="page-indicators" class="page">
+  <h2>Technical Indicators</h2>
+  <p class="subtitle">Click any indicator to see formula, signals, and how to use it in NSE swing trades</p>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;" id="indicator-grid">
+  </div>
+  <div id="detail-panel">
+    <p style="color:var(--text3);font-size:13px;">← Select an indicator above to see details</p>
+  </div>
+</div>
+
+<!-- ============ ALGORITHMS ============ -->
+<div id="page-algorithms" class="page">
+  <h2>Trading Algorithms & Strategies</h2>
+  <p class="subtitle">Proven systematic approaches used by professionals — click each to expand</p>
+
+  <div id="algo-list"></div>
+</div>
+
+<!-- ============ SCANNER ============ -->
+<div id="page-scanner" class="page">
+  <h2>Stock Scanner Framework</h2>
+  <p class="subtitle">Step-by-step filtering system to find 10% swing candidates from NSE 100</p>
+
+  <div class="card">
+    <h3>Stage 1 — Universe Filter (Daily, Takes 10 mins)</h3>
+    <div class="checklist-item">
+      <div class="check-num">1</div>
+      <div><div class="check-title">Market Condition Check</div><div class="check-body">Nifty 50: above 200 DMA? India VIX below 20? FII data from NSE: net buyers or sellers this week? If all bad — no trading today, wait.</div></div>
+    </div>
+    <div class="checklist-item">
+      <div class="check-num">2</div>
+      <div><div class="check-title">Sector Strength Scan</div><div class="check-body">On TradingView/Chartink: which NSE sectors are showing highest RS (Relative Strength) vs Nifty in last 20 days? Only look for trades in top 2-3 sectors.</div></div>
+    </div>
+    <div class="checklist-item">
+      <div class="check-num">3</div>
+      <div><div class="check-title">Volume Surge Filter</div><div class="check-body">Screener.in filter: Volume today &gt; 150% of 20-day average AND Price change &gt; 2%. This catches stocks with institutional activity.</div></div>
+    </div>
+    <div class="checklist-item">
+      <div class="check-num">4</div>
+      <div><div class="check-title">52-Week High Proximity</div><div class="check-body">Filter stocks within 5-10% of 52-week high. Minervini's research: stocks near new highs continue higher more than those "cheap" stocks far from highs.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Stage 2 — Technical Qualification (Chart-by-Chart)</h3>
+    <div class="checklist-item">
+      <div class="check-num">5</div>
+      <div><div class="check-title">Trend Confirmation</div><div class="check-body">EMA 20 &gt; EMA 50 &gt; EMA 200 on daily chart (bullish alignment). Price above all three EMAs. This is non-negotiable for long trades.</div></div>
+    </div>
+    <div class="checklist-item">
+      <div class="check-num">6</div>
+      <div><div class="check-title">Pattern Identification</div><div class="check-body">Is there a recognized setup? Cup with handle, Bull flag, Darvas box breakout, ascending triangle, VCP (Volatility Contraction Pattern). No clear pattern = no trade.</div></div>
+    </div>
+    <div class="checklist-item">
+      <div class="check-num">7</div>
+      <div><div class="check-title">Indicator Confluence</div><div class="check-body">At minimum 3 indicators must agree: RSI 50-70 range (not overbought), MACD bullish crossover or histogram expanding, volume at pattern breakout &gt; 1.5x average.</div></div>
+    </div>
+    <div class="checklist-item">
+      <div class="check-num">8</div>
+      <div><div class="check-title">Support/Stop Level</div><div class="check-body">Identify the stop-loss level BEFORE entry. Must be a clear technical level — recent swing low, pattern low, or key EMA. Stop should be max 5-7% below entry for 10% target (R:R ≥ 1.5:1)</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Stage 3 — Entry Execution Criteria</h3>
+    <div class="entry-exit-row">
+      <div class="entry-box">
+        <div class="entry-title">Entry Triggers (All 3 Preferred)</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+          <div>✓ Breakout candle closes above resistance on daily chart</div>
+          <div>✓ Volume on breakout day ≥ 1.5x 20-day average volume</div>
+          <div>✓ RSI crossing above 55 or confirming at 60–65 zone</div>
+          <div>✓ MACD line crossing above signal line</div>
+          <div style="margin-top:8px;color:var(--green);">Enter at open next day after breakout close, or on same-day close</div>
+        </div>
+      </div>
+      <div class="exit-box">
+        <div class="exit-title">Exit Rules (First to trigger wins)</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+          <div>✓ Target hit: 10% profit — book 50%, trail rest</div>
+          <div>✓ Stop-loss hit: Exit 100%, no averaging down</div>
+          <div>✓ Time stop: 5 days without meaningful move — exit</div>
+          <div>✓ Breakdown below key EMA — exit regardless of P&L</div>
+          <div style="margin-top:8px;color:var(--red);">Never hold through earnings without specific plan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Top NSE 100 Swing Trading Stocks (By Category)</h3>
+    <div class="grid-3">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">High Momentum</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8;">ADANIPORTS, BAJFINANCE, HDFCBANK, ICICIBANK, KOTAKBANK, RELIANCE, TATAMOTORS, TATAPOWER, BAJAJFINSV, SBILIFE</div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">High Beta (10%+ movers)</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8;">TATASTEEL, HINDALCO, JSWSTEEL, SBIN, INDUSINDBK, IDEA, VEDL, ADANIENT, BANKBARODA, CANBK</div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Trend Quality</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8;">INFY, TCS, WIPRO, HCLTECH, TITAN, DMART, ASIANPAINT, NESTLEIND, BRITANNIA, PIDILITIND</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RISK MANAGEMENT ============ -->
+<div id="page-riskmanagement" class="page">
+  <h2>Risk & Money Management</h2>
+  <p class="subtitle">The only part of trading you fully control — master this before anything else</p>
+
+  <div class="card card-gold">
+    <h3>The Golden Rules (from Jack Schwager's Market Wizards)</h3>
+    <div class="rule-box">1. <strong>Never risk more than 1-2% of capital on a single trade.</strong> On ₹5L capital = max ₹5,000–₹10,000 risk per trade.</div>
+    <div class="rule-box">2. <strong>Position size from your stop, not from a fixed amount.</strong> If stop is 5% away, your position = (2% capital risk) ÷ (5% stop) = 40% of capital max.</div>
+    <div class="rule-box">3. <strong>Maximum portfolio risk at any time: 6–8%.</strong> If in 4 trades each risking 2%, one bad day can't blow you up.</div>
+    <div class="rule-box">4. <strong>If you lose 10% of capital in a week, stop trading for 2 weeks.</strong> This prevents the emotional spiral that destroys accounts.</div>
+  </div>
+
+  <div class="card">
+    <h3>Position Sizing Calculator</h3>
+    <div class="grid-2">
+      <div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:4px;">Capital (₹)</label>
+          <input type="number" id="capital" value="500000" oninput="calcPosition()" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:8px 12px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:4px;">Risk per trade (%)</label>
+          <input type="number" id="risk-pct" value="2" step="0.5" min="0.5" max="5" oninput="calcPosition()" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:8px 12px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:4px;">Stop distance (%)</label>
+          <input type="number" id="stop-pct" value="5" step="0.5" min="1" max="15" oninput="calcPosition()" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:8px 12px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;">
+        </div>
+        <div>
+          <label style="font-size:12px;color:var(--text3);display:block;margin-bottom:4px;">Stock price (₹)</label>
+          <input type="number" id="stock-price" value="1000" oninput="calcPosition()" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:8px 12px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;justify-content:center;gap:12px;">
+        <div class="card-sm">
+          <div style="font-size:12px;color:var(--text3);">Max risk amount</div>
+          <div class="big-num" id="risk-amount" style="font-size:24px;margin-top:4px;">₹10,000</div>
+        </div>
+        <div class="card-sm">
+          <div style="font-size:12px;color:var(--text3);">Position size (₹)</div>
+          <div class="big-num" id="position-size" style="font-size:24px;color:var(--teal);margin-top:4px;">₹2,00,000</div>
+        </div>
+        <div class="card-sm">
+          <div style="font-size:12px;color:var(--text3);">Number of shares</div>
+          <div class="big-num" id="num-shares" style="font-size:24px;color:var(--purple);margin-top:4px;">200</div>
+        </div>
+        <div class="card-sm">
+          <div style="font-size:12px;color:var(--text3);">Target (10% profit)</div>
+          <div class="big-num" id="target-profit" style="font-size:24px;color:var(--green);margin-top:4px;">₹20,000</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Reward-to-Risk Framework</h3>
+    <table class="data-table">
+      <tr><th>R:R Ratio</th><th>Win Rate Needed to Break Even</th><th>Verdict</th></tr>
+      <tr><td>1:1</td><td>50%</td><td><span class="tag tag-sell">Too Low</span></td></tr>
+      <tr><td>1.5:1</td><td>40%</td><td><span class="tag tag-neutral">Acceptable</span></td></tr>
+      <tr><td>2:1</td><td>33%</td><td><span class="tag tag-buy">Good</span></td></tr>
+      <tr><td>3:1</td><td>25%</td><td><span class="tag tag-buy">Excellent</span></td></tr>
+      <tr><td>4:1+</td><td>20%</td><td><span class="tag tag-buy">Target This</span></td></tr>
+    </table>
+    <div class="rule-box" style="margin-top:12px;">For 10% target, stop must be no more than 5-6% away (minimum 1.7:1 R:R). Ideally stop at 3-4% for 2.5–3:1 ratio.</div>
+  </div>
+</div>
+
+<!-- ============ PSYCHOLOGY ============ -->
+<div id="page-psychology" class="page">
+  <h2>Trading Psychology</h2>
+  <p class="subtitle">The market transfers money from the undisciplined to the disciplined. Period.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>The 5 Killers of Retail Traders</h3>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--red)"></div>
+          <div class="tl-title">1. Averaging Down Losers</div>
+          <div class="tl-body">Buying more of a stock that is going against you. The market doesn't know your average price. Stop out, wait for setup to reset.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--red)"></div>
+          <div class="tl-title">2. Moving the Stop Loss</div>
+          <div class="tl-body">"Just a little more" is how small losses become account killers. Stop is placed by analysis, not emotion.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--red)"></div>
+          <div class="tl-title">3. Overtrading After Loss</div>
+          <div class="tl-body">Revenge trading to recover quickly accelerates losses. One stop-out = stop for the day. Review, journal, come back tomorrow.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--red)"></div>
+          <div class="tl-title">4. Selling Winners Too Early</div>
+          <div class="tl-body">Fear of giving back profit causes you to exit 3% when setup had 10% potential. Let the system work. Trail, don't panic-exit.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--red)"></div>
+          <div class="tl-title">5. FOMO Entries</div>
+          <div class="tl-body">Chasing stocks already up 8-10% without a setup. You become the exit liquidity for those who bought right. Wait for the next pullback.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Building a Bulletproof Process</h3>
+      <div class="rule-box">
+        <strong>Pre-Market (8:00–9:00 AM)</strong><br>
+        Check SGX Nifty / GIFT Nifty. Note US market close. Check VIX. Review India VIX. Scan for overnight news on holdings.
+      </div>
+      <div class="rule-box">
+        <strong>Market Open (9:15–9:30 AM)</strong><br>
+        Watch, don't trade. Let opening volatility settle. See where Nifty is relative to yesterday's close.
+      </div>
+      <div class="rule-box">
+        <strong>Entry Window (9:30–11:30 AM)</strong><br>
+        Best time for breakout entries. Volume is high, institutions are active. Set limit orders, not market orders.
+      </div>
+      <div class="rule-box">
+        <strong>Afternoon Review (1:30–2:30 PM)</strong><br>
+        Mid-day lull. Review open positions. No new entries unless exceptional setup.
+      </div>
+      <div class="rule-box">
+        <strong>Close Watch (3:00–3:30 PM)</strong><br>
+        Watch for end-of-day strength or weakness. Closing price matters most. Set next day's alerts.
+      </div>
+      <div class="rule-box" style="border-color:var(--green);">
+        <strong>Post-Market (4:00–5:00 PM)</strong><br>
+        Journal: what worked, what didn't. Screenshot charts. Plan next day's watchlist. Emotion debrief.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>The Trading Journal Framework</h3>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:12px;">Mark Douglas (author of Trading in the Zone) found that traders who kept detailed journals improved win rates by 30–40% within 6 months. Every trade needs these fields:</p>
+    <table class="data-table">
+      <tr><th>Field</th><th>What to Record</th><th>Why It Matters</th></tr>
+      <tr><td>Setup Type</td><td>Bull flag, VCP, breakout, etc.</td><td>Track which patterns work best for you</td></tr>
+      <tr><td>Market Context</td><td>Nifty trend, VIX, sector RS</td><td>Identify when you trade best</td></tr>
+      <tr><td>Entry Reason</td><td>All 3 criteria met? Which?</td><td>Forces pre-trade discipline</td></tr>
+      <tr><td>Risk:Reward</td><td>Calculated before entry</td><td>Reject trades with poor R:R</td></tr>
+      <tr><td>Emotional State</td><td>1-10 scale, key emotions</td><td>Spot when you trade emotionally</td></tr>
+      <tr><td>Outcome</td><td>P&L, exit reason, duration</td><td>Track expectancy per setup</td></tr>
+      <tr><td>Lesson</td><td>1 thing you'd do differently</td><td>Compound learning over time</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============ PLAYBOOK ============ -->
+<div id="page-playbook" class="page">
+  <h2>Weekly Swing Playbook</h2>
+  <p class="subtitle">A structured week-by-week operating rhythm to find and execute 10% setups</p>
+
+  <div class="card">
+    <h3>The Weekly Rhythm</h3>
+    <div class="week-grid">
+      <div class="day-card">
+        <div class="day-name">Monday</div>
+        <div style="color:var(--blue);font-size:11px;font-weight:600;margin-top:4px;">SCAN</div>
+        <div class="day-action">Run full NSE 100 scan. Identify top 5 watchlist candidates. Mark all key levels.</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Tuesday</div>
+        <div style="color:var(--green);font-size:11px;font-weight:600;margin-top:4px;">ENTER</div>
+        <div class="day-action">Best day to enter breakout trades. Volume and momentum tend to peak Tue–Wed.</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Wednesday</div>
+        <div style="color:var(--gold);font-size:11px;font-weight:600;margin-top:4px;">MANAGE</div>
+        <div class="day-action">Check open positions. Trail stops if up 5%+. Enter any missed Tue setups with caution.</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Thursday</div>
+        <div style="color:var(--purple);font-size:11px;font-weight:600;margin-top:4px;">EXPIRY</div>
+        <div class="day-action">Weekly F&O expiry. Avoid new equity entries unless unrelated to derivatives. High volatility day.</div>
+      </div>
+      <div class="day-card">
+        <div class="day-name">Friday</div>
+        <div style="color:var(--red);font-size:11px;font-weight:600;margin-top:4px;">REVIEW</div>
+        <div class="day-action">Close any trades not hitting target by 3:15 PM. Weekend risk — don't hold uncertain positions.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>The Perfect NSE Swing Setup Checklist</h3>
+      <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+        <div style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="color:var(--green)">□</span> Nifty in uptrend (above 200 DMA)</div>
+        <div style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="color:var(--green)">□</span> Stock's sector is outperforming Nifty</div>
+        <div style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="color:var(--green)">□</span> India VIX below 20</div>
+        <div style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="color:var(--green)">□</span> Stock in Stage 2 (EMA 20 > 50 > 200)</div>
+        <div style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="color:var(--green)">□</span> Clear pattern: flag, VCP, cup, box, triangle</div>
+        <div style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="color:var(--green)">□</span> RSI 50–70 range (not overbought at entry)</div>
+        <div style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="color:var(--green)">□</span> MACD bullish crossover or positive histogram</div>
+        <div style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="color:var(--green)">□</span> Breakout on volume ≥ 1.5x 20-day avg</div>
+        <div style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="color:var(--green)">□</span> Stop-loss clearly defined at technical level</div>
+        <div style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="color:var(--green)">□</span> R:R ratio at least 2:1 (ideally 3:1)</div>
+        <div style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="color:var(--green)">□</span> No major result / event within hold period</div>
+        <div style="padding:5px 0;"><span style="color:var(--green)">□</span> Position size within 2% capital risk rule</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Learning Roadmap</h3>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--blue)"></div>
+          <div class="tl-title">Month 1–2: Foundation</div>
+          <div class="tl-body">Paper trade only. Master reading candlestick charts, S/R levels, basic indicators (RSI, MACD, Volume). Read: Stan Weinstein's "Secrets for Profiting" and O'Neil's "How to Make Money in Stocks".</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--teal)"></div>
+          <div class="tl-title">Month 3–4: Pattern Recognition</div>
+          <div class="tl-body">Study 500+ historical charts (TradingView replay feature). Identify patterns before the move happens. Track your accuracy. Start with tiny real capital (₹20–50K).</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--gold)"></div>
+          <div class="tl-title">Month 5–6: System Building</div>
+          <div class="tl-body">Define YOUR rules precisely. Backtest your best 3 setups over 1 year of NSE data. Calculate expected win rate, average gain, average loss. Read: Minervini's "Trade Like a Stock Market Wizard".</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--green)"></div>
+          <div class="tl-title">Month 7–12: Execution Mastery</div>
+          <div class="tl-body">Scale up capital gradually. Trade with full rules, zero exceptions. Review journal monthly. Read: Mark Douglas "Trading in the Zone". At this stage consistent 40–60% annual returns is realistic.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--purple)"></div>
+          <div class="tl-title">Year 2+: Specialization</div>
+          <div class="tl-body">Develop edge in 1–2 specific setups. Consider sector specialization. Explore adding options for protection. Build screeners. Consider building your own system/platform (like this one!).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+const indicators = [
+  {name:'RSI',cat:'Momentum',color:'#a78bfa',
+   formula:'RSI = 100 - [100/(1 + RS)] where RS = Avg Gain / Avg Loss over 14 periods',
+   signal:'<30 = Oversold (potential buy). >70 = Overbought (potential sell). 50-70 = sweet zone for swing longs.',
+   use:'For NSE swings: Enter when RSI crosses above 55 in an uptrend. Exit when RSI crosses below 70 from above. RSI divergence (price new high, RSI lower high) = warning signal.',
+   avoid:'Never buy simply because RSI is "oversold" — a stock can stay oversold for months in a downtrend.'},
+  {name:'MACD',cat:'Trend/Momentum',color:'#60a5fa',
+   formula:'MACD Line = EMA(12) - EMA(26)\nSignal Line = EMA(9) of MACD\nHistogram = MACD - Signal',
+   signal:'Bullish: MACD line crosses above signal line. Histogram turns positive. Best when crossing above zero line.',
+   use:'NSE swings: MACD crossover + bullish candle pattern + volume = powerful combination. Use histogram expansion as trend confirmation.',
+   avoid:'MACD lags — it\'s a confirmation tool, not a leading indicator. In choppy markets, multiple false crossovers occur.'},
+  {name:'EMA 20/50/200',cat:'Trend',color:'#f0b429',
+   formula:'EMA(n) = Price × (2/(n+1)) + EMA_prev × (1 - 2/(n+1))',
+   signal:'Golden Cross (50 crosses above 200) = major bullish signal. Price above EMA 20 = short-term uptrend. EMA 20 > 50 > 200 = full bull alignment.',
+   use:'NSE: Use EMA 20 as dynamic support for trailing stops in swing trades. Pullback to EMA 20 in uptrend = buy opportunity. Break below EMA 50 = reduce position.',
+   avoid:'EMAs are lagging. In sideways markets they give no information — price will oscillate around them with whipsaws.'},
+  {name:'Bollinger Bands',cat:'Volatility',color:'#2dd4bf',
+   formula:'Middle Band = SMA(20)\nUpper Band = SMA + 2×StdDev\nLower Band = SMA - 2×StdDev',
+   signal:'Band Squeeze (bands narrow) = upcoming volatility explosion. Break above upper band on volume = bullish momentum. Touch lower band in uptrend = buy signal.',
+   use:'NSE swings: After a Bollinger Squeeze, buy the breakout direction with volume confirmation. For mean-reversion: buy touch of lower band only if RSI is 30-50 and trend is up.',
+   avoid:'Don\'t trade touches alone. In strong trends price "walks the upper band" for weeks — this is strength, not reversal.'},
+  {name:'Volume',cat:'Confirmation',color:'#4ade80',
+   formula:'OBV = Running total of volume with + on up days, - on down days\nVolume MA = SMA(20) of daily volume',
+   signal:'Breakout on 2x+ average volume = institutional interest. Rising price + falling volume = trend weakening. OBV divergence = early reversal warning.',
+   use:'NSE: Every entry must have volume > 1.5x 20-day average on breakout day. No volume = fake breakout, skip trade.',
+   avoid:'Don\'t use volume alone. In pre-results periods, volume spikes on speculation, not genuine institutional activity.'},
+  {name:'ADX',cat:'Trend Strength',color:'#f87171',
+   formula:'ADX = Smoothed Moving Avg of DX\nDX = |+DI - -DI| / |+DI + -DI| × 100',
+   signal:'ADX > 25 = strong trend, breakout strategies work. ADX < 20 = choppy market, avoid breakouts. ADX rising = trend strengthening.',
+   use:'NSE filter: Only enter breakout trades when ADX is above 20 and rising. If ADX is below 20, use mean-reversion setups instead.',
+   avoid:'ADX tells you trend strength but not direction. A falling stock can have ADX > 25. Always combine with +DI/-DI.'},
+  {name:'Stochastic',cat:'Momentum',color:'#f0b429',
+   formula:'%K = (Current Close - Lowest Low)/(Highest High - Lowest Low) × 100\n%D = 3-period SMA of %K',
+   signal:'<20 = Oversold. >80 = Overbought. %K crossing above %D in oversold zone = buy signal.',
+   use:'NSE: Use for timing pullback entries in uptrends. When stock pulls back to EMA 20 and Stochastic is below 30, entering on %K/%D cross is high probability.',
+   avoid:'Like RSI, ignore oversold signals in downtrends. Only use in context of overall uptrend.'},
+  {name:'Fibonacci',cat:'Price Levels',color:'#a78bfa',
+   formula:'Key levels: 23.6%, 38.2%, 50%, 61.8% retracement of prior swing move',
+   signal:'38.2% and 61.8% retracements are the highest probability pullback zones. 61.8% is the "golden ratio" — deepest pullback a healthy trend makes.',
+   use:'NSE: After a strong up-move, wait for pullback to 38.2–61.8% zone, then look for reversal candles + RSI bounce + volume drying up. This is a tier-1 entry zone.',
+   avoid:'Don\'t use Fibonacci in isolation. If price breaks below 61.8% of the prior move, the "pullback" is probably a new downtrend.'},
+  {name:'VWAP',cat:'Institutional',color:'#2dd4bf',
+   formula:'VWAP = Cumulative(Price × Volume) / Cumulative Volume\n(Resets daily)',
+   signal:'Price above VWAP = buyers in control. Below VWAP = sellers in control. Institutional algorithms use VWAP for order execution.',
+   use:'NSE intraday: Stocks that gap up and hold above VWAP for first 30 mins = strong for the day. Use VWAP as intraday stop for swing positions entered intraday.',
+   avoid:'VWAP resets daily, so it\'s an intraday tool. Don\'t apply it to swing trade exits.'},
+  {name:'SuperTrend',cat:'Trend',color:'#4ade80',
+   formula:'SuperTrend = (High+Low)/2 ± (Multiplier × ATR)\nDefault: Period=7, Multiplier=3',
+   signal:'Green SuperTrend below price = bullish. Red SuperTrend above price = bearish. Flip from red to green = buy signal.',
+   use:'NSE: Many Indian traders use SuperTrend as a simple trailing stop. Works well in trending phases. When SuperTrend flips to green, enter. Trail with SuperTrend line.',
+   avoid:'In sideways markets, SuperTrend flips repeatedly creating many false signals and stop-outs.'},
+  {name:'ATR',cat:'Volatility',color:'#f87171',
+   formula:'ATR = Smoothed Moving Avg of True Range\nTrue Range = Max(High-Low, |High-PrevClose|, |Low-PrevClose|)',
+   signal:'High ATR = high volatility, widen stops. Low ATR = low volatility (squeeze). ATR breakout = volatility expansion starting.',
+   use:'NSE: Set stop-loss as Entry Price - 2×ATR. This adapts to each stock\'s volatility. A ₹200 stock with ATR 8 needs stop at 16 below entry.',
+   avoid:'ATR doesn\'t give direction — only magnitude. Always combine with directional indicator.'},
+  {name:'OBV',cat:'Volume',color:'#60a5fa',
+   formula:'OBV = OBV_prev + Volume (if close > prev close)\nOBV = OBV_prev - Volume (if close < prev close)',
+   signal:'OBV making new highs while price makes new highs = confirmed uptrend. OBV diverging downward while price still rising = distribution warning.',
+   use:'NSE: Use OBV divergence as early warning of institutional selling even before price drops. If OBV starts declining while price holds — reduce exposure.',
+   avoid:'OBV is a cumulative measure and can diverge for extended periods before price follows. Don\'t act on divergence alone — wait for price confirmation.'},
+];
+
+function renderIndicators() {
+  const grid = document.getElementById('indicator-grid');
+  grid.innerHTML = indicators.map((ind,i)=>`
+    <div class="indicator-card" id="ind-${i}" onclick="showIndicator(${i})">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div class="indicator-name">${ind.name}</div>
+        <div style="width:10px;height:10px;border-radius:50%;background:${ind.color};flex-shrink:0;margin-top:3px;"></div>
+      </div>
+      <div class="indicator-cat">${ind.cat}</div>
+    </div>
+  `).join('');
+}
+
+function showIndicator(i) {
+  document.querySelectorAll('.indicator-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('ind-'+i).classList.add('selected');
+  const ind = indicators[i];
+  document.getElementById('detail-panel').innerHTML = `
+    <h3 style="color:${ind.color};margin-bottom:12px;">${ind.name} — ${ind.cat}</h3>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Formula</div>
+      <div class="formula-block">${ind.formula.replace(/\n/g,'<br>')}</div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Signals</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;">${ind.signal}</div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">How to Use for NSE Swings</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;">${ind.use}</div>
+    </div>
+    <div>
+      <div style="font-size:11px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">⚠ Common Mistake</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;">${ind.avoid}</div>
+    </div>
+  `;
+}
+
+const algos = [
+  {title:'VCP — Volatility Contraction Pattern',type:'Mark Minervini | Breakout',
+   detail:`<p style="margin-bottom:8px;">Stock makes a series of contractions: first pullback 25-30%, then 15-20%, then 10-12%, then 5-7%. Each pullback is smaller = sellers are exhausting. Volume also contracts at each correction.</p>
+   <div class="formula-block">Setup: 3-4 contractions, each smaller in % decline and volume\nEntry: Breakout above tightest contraction high on volume 2x+ average\nStop: Below the tightest contraction low\nTarget: Prior base height added to breakout point</div>
+   <p style="color:var(--text2);font-size:12px;">NSE Examples: Works beautifully on Nifty 100 stocks coming out of 6-12 month basing structures. Look at RELIANCE 2020, HDFCBANK 2022-23 for classic VCP patterns.</p>`},
+  {title:'SEPA — Specific Entry Point Analysis',type:'Mark Minervini | Precision Entry',
+   detail:`<p style="margin-bottom:8px;">Combines fundamental + technical + timing. Only buy: highest RS stocks, with earnings acceleration, at a specific technical entry point, in a bull market confirmed by market exposure models.</p>
+   <div class="formula-block">Trend Template:\n1. Price > 150 DMA and 200 DMA\n2. 150 DMA > 200 DMA\n3. 200 DMA trending up ≥ 1 month\n4. 50 DMA > 150 DMA and 200 DMA\n5. Price > 50 DMA\n6. Price within 25% of 52-week high\n7. Price ≥ 30% above 52-week low</div>
+   <p style="color:var(--text2);font-size:12px;">Use this as a pre-qualification checklist for every NSE stock before deeper analysis.</p>`},
+  {title:'Cup with Handle',type:'William O\'Neil | Base Pattern',
+   detail:`<p style="margin-bottom:8px;">U-shaped consolidation 7-65 weeks, with a small handle forming in upper right (5-15% pullback on declining volume). Handle should drift down gently, not sharply.</p>
+   <div class="formula-block">Cup depth: 12-35% from high to low\nHandle: 5-15% below cup high, volume dries up\nEntry: Above handle high on volume surge\nStop: Below handle low\nTarget: Cup depth added to pivot point</div>
+   <p style="color:var(--text2);font-size:12px;">O'Neil found that stocks bought at the proper pivot in a cup-with-handle outperformed 80% of the time when purchased during confirmed market uptrends.</p>`},
+  {title:'Darvas Box System',type:'Nicolas Darvas | Breakout',
+   detail:`<p style="margin-bottom:8px;">Draw a box around recent consolidation. Top of box = resistance (recent highs). Bottom of box = support. Buy when price breaks out of the top of the box with increasing volume.</p>
+   <div class="formula-block">Box Rule:\n- Stock must make a new high in box range\n- Must close back in box 3 times without making new low\n- Box confirmed when top and bottom established\nEntry: 1% above box top on volume\nStop: Below box bottom\nTarget: Box height projected upward</div>
+   <p style="color:var(--text2);font-size:12px;">Works exceptionally well on NSE mid-large caps. TradingView has Darvas Box indicator built-in.</p>`},
+  {title:'EMA Pullback Strategy',type:'Stan Weinstein | Stage 2 Entry',
+   detail:`<p style="margin-bottom:8px;">In a Stage 2 uptrend, stocks pull back to rising EMA 20 or EMA 50 and bounce. These pullbacks are buying opportunities with defined risk at the MA level.</p>
+   <div class="formula-block">Conditions:\n1. Stock in Stage 2 (EMA 20 > 50 > 200, all rising)\n2. Price pulls back to EMA 20 or EMA 50\n3. Volume dries up during pullback (weakness exhausted)\n4. Bounce candle: bullish engulfing, hammer, doji+confirm\nEntry: On bounce confirmation candle\nStop: 1-2% below the EMA level\nTarget: Prior high or 2x the risk</div>
+   <p style="color:var(--text2);font-size:12px;">This is the most consistent NSE swing setup — works in 60-70% of cases during confirmed uptrends.</p>`},
+  {title:'RSI Divergence Strategy',type:'Momentum | Reversal',
+   detail:`<p style="margin-bottom:8px;">When price makes a new high/low but RSI fails to confirm — divergence signals momentum is waning and reversal may follow.</p>
+   <div class="formula-block">Bearish Divergence: Price new high, RSI lower high → Exit/Short\nBullish Divergence: Price new low, RSI higher low → Potential Long\n\nConfirmation Rules:\n- Divergence must occur at key S/R level\n- RSI divergence + MACD divergence = stronger signal\n- Wait for price reversal candle to confirm</div>
+   <p style="color:var(--text2);font-size:12px;">Use bearish RSI divergence to EXIT swing longs before the reversal, not just to short. Primary use: protecting profits.</p>`},
+  {title:'Opening Range Breakout (ORB)',type:'Toby Crabel | Intraday-Swing',
+   detail:`<p style="margin-bottom:8px;">NSE-specific: The high and low of the first 15-30 minutes forms the "Opening Range." Breakout above/below this range with volume signals the direction for the day, and often for 2-3 days.</p>
+   <div class="formula-block">ORB Setup (15-min):\n- Record high/low of 9:15–9:30 AM\n- Wait for break above high or below low\n- Confirm with volume > 1.5x typical 15-min volume\n- Entry: 0.1-0.2% above range for long\n- Stop: Opposite side of range\nHold: 1-3 days for swing target</div>
+   <p style="color:var(--text2);font-size:12px;">NSE stocks with significant ORB (range > 2%) tend to continue the move for 1-3 days. Track on Nifty 50 constituents for clearest signals.</p>`},
+  {title:'Wyckoff Accumulation',type:'Richard Wyckoff | Institutional',
+   detail:`<p style="margin-bottom:8px;">Identifies when "Composite Operator" (smart money / institutions) is silently accumulating stock before a large move. Phases: PS (Preliminary Support) → SC (Selling Climax) → AR (Automatic Rally) → ST (Secondary Test) → Spring → LPS (Last Point of Support) → SOS (Sign of Strength).</p>
+   <div class="formula-block">Key Events:\n- Spring: Price dips below support, quickly reverses → institutions absorb final sellers\n- LPS: Pullback after Spring on low volume → final accumulation\n- SOS: Strong move up on high volume → markup begins\nEntry: At LPS or SOS breakout\nStop: Below Spring low\nTarget: Measured move of trading range</div>
+   <p style="color:var(--text2);font-size:12px;">Apply to weekly NSE charts of banking stocks (HDFCBANK, ICICIBANK) during broad market corrections for highest-probability entries.</p>`},
+];
+
+function renderAlgos() {
+  document.getElementById('algo-list').innerHTML = algos.map((a,i)=>`
+    <div class="algo-card" id="algo-${i}" onclick="toggleAlgo(${i})">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div class="algo-title">${a.title}</div>
+          <div class="algo-type">${a.type}</div>
+        </div>
+        <div style="color:var(--text3);font-size:18px;transition:transform .2s;" id="arr-${i}">›</div>
+      </div>
+      <div class="algo-detail" style="margin-top:12px;">${a.detail}</div>
+    </div>
+  `).join('');
+}
+
+function toggleAlgo(i) {
+  const card = document.getElementById('algo-'+i);
+  const arr = document.getElementById('arr-'+i);
+  card.classList.toggle('open');
+  arr.style.transform = card.classList.contains('open') ? 'rotate(90deg)' : '';
+}
+
+function calcPosition() {
+  const capital = parseFloat(document.getElementById('capital').value)||0;
+  const riskPct = parseFloat(document.getElementById('risk-pct').value)||0;
+  const stopPct = parseFloat(document.getElementById('stop-pct').value)||0;
+  const stockPrice = parseFloat(document.getElementById('stock-price').value)||0;
+  const riskAmount = capital * riskPct / 100;
+  const positionSize = stopPct > 0 ? riskAmount / (stopPct/100) : 0;
+  const numShares = stockPrice > 0 ? Math.floor(positionSize / stockPrice) : 0;
+  const targetProfit = numShares * stockPrice * 0.10;
+  document.getElementById('risk-amount').textContent = '₹'+Math.round(riskAmount).toLocaleString('en-IN');
+  document.getElementById('position-size').textContent = '₹'+Math.round(positionSize).toLocaleString('en-IN');
+  document.getElementById('num-shares').textContent = numShares.toLocaleString('en-IN');
+  document.getElementById('target-profit').textContent = '₹'+Math.round(targetProfit).toLocaleString('en-IN');
+}
+
+renderIndicators();
+renderAlgos();
+calcPosition();
+</script>
+</body>
+</html>

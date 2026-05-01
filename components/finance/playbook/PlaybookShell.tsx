@@ -2,7 +2,9 @@
 
 import { useState } from 'react'
 import type { ComponentType } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { ArrowLeft } from 'lucide-react'
 import Overview from './sections/Overview'
 import MarketPrinciples from './sections/MarketPrinciples'
 import Indicators from './sections/Indicators'
@@ -42,6 +44,15 @@ export default function PlaybookShell() {
 
   return (
     <div className="space-y-0">
+      {/* Back nav */}
+      <Link
+        href="/finance"
+        className="inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-300 text-sm mb-5 transition-colors"
+      >
+        <ArrowLeft size={14} />
+        Back to Finance
+      </Link>
+
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-white text-3xl font-bold tracking-tight">NSE 100 Swing Trading</h1>

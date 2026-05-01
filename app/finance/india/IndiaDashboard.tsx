@@ -31,9 +31,9 @@ export default function IndiaDashboard() {
     fetch('/api/finance/india/stocks')
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json() as Promise<IndiaStockWithSignal[]>
+        return res.json() as Promise<{ stocks: IndiaStockWithSignal[] }>
       })
-      .then((data) => {
+      .then(({ stocks: data }) => {
         setStocks(data)
         if (data.length > 0 && data[0].stock?.ticker) {
           setSelectedTicker(data[0].stock.ticker)
@@ -61,7 +61,7 @@ export default function IndiaDashboard() {
           India Stocks · Nifty 50
         </h2>
         <p className="text-zinc-500 text-sm mt-1">
-          BUY/HOLD/SELL signals · Updated 3× daily · Powered by Claude AI
+          BUY/HOLD/SELL signals · 8 strategy algorithms · Updated 3× daily
         </p>
         {latestDate && (
           <p className="text-zinc-600 text-xs mt-0.5">

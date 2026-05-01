@@ -35,9 +35,9 @@ export default function FinanceShell() {
         ))}
         <Link
           href="/finance/playbook"
-          className="ml-auto flex items-center gap-1.5 text-zinc-500 hover:text-zinc-300 text-sm py-2 px-3 transition-colors"
+          className="ml-auto flex items-center gap-2 text-[#FF8000] hover:text-orange-400 text-sm font-semibold py-2 px-3 transition-colors border border-[#FF8000]/30 hover:border-[#FF8000]/60 rounded-lg bg-[#FF8000]/5 hover:bg-[#FF8000]/10"
         >
-          <BookOpen size={14} />
+          <BookOpen size={16} />
           Playbook
         </Link>
       </div>

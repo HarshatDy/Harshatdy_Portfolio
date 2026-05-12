@@ -9,7 +9,13 @@ const url = `${base}/api/finance/india/fetch?slot=${slot}`;
 
 console.log(`[${new Date().toISOString()}] Fetching ${url}`);
 
-fetch(url)
+const secret = process.env.CRON_SECRET;
+if (!secret) {
+  console.error("CRON_SECRET env var is not set");
+  process.exit(1);
+}
+
+fetch(url, { headers: { Authorization: `Bearer ${secret}` } })
   .then((res) => {
     console.log(`[${new Date().toISOString()}] ${slot} -> ${res.status}`);
     process.exit(res.ok ? 0 : 1);

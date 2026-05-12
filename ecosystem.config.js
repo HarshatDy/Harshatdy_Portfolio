@@ -1,3 +1,5 @@
+require("dotenv").config({ path: require("path").join(__dirname, ".env.local") });
+
 module.exports = {
   apps: [
     {
@@ -18,6 +20,7 @@ module.exports = {
       watch: false,
       env: {
         APP_URL: "http://localhost:3000",
+        CRON_SECRET: process.env.CRON_SECRET,
       },
     },
     {
@@ -29,6 +32,7 @@ module.exports = {
       watch: false,
       env: {
         APP_URL: "http://localhost:3000",
+        CRON_SECRET: process.env.CRON_SECRET,
       },
     },
     {
@@ -40,6 +44,7 @@ module.exports = {
       watch: false,
       env: {
         APP_URL: "http://localhost:3000",
+        CRON_SECRET: process.env.CRON_SECRET,
       },
     },
   ],

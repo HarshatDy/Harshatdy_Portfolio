@@ -8,7 +8,7 @@ module.exports = {
       args: "start",
       env: {
         NODE_ENV: "production",
-        PORT: 3000,
+        PORT: 3002,
       },
     },
     {
@@ -19,7 +19,7 @@ module.exports = {
       autorestart: false,
       watch: false,
       env: {
-        APP_URL: "http://localhost:3000",
+        APP_URL: "http://localhost:3002",
         CRON_SECRET: process.env.CRON_SECRET,
       },
     },
@@ -31,7 +31,7 @@ module.exports = {
       autorestart: false,
       watch: false,
       env: {
-        APP_URL: "http://localhost:3000",
+        APP_URL: "http://localhost:3002",
         CRON_SECRET: process.env.CRON_SECRET,
       },
     },
@@ -43,7 +43,7 @@ module.exports = {
       autorestart: false,
       watch: false,
       env: {
-        APP_URL: "http://localhost:3000",
+        APP_URL: "http://localhost:3002",
         CRON_SECRET: process.env.CRON_SECRET,
       },
     },

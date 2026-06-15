@@ -23,6 +23,12 @@ export default function IndiaDashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedTicker, setSelectedTicker] = useState<string | null>(null)
+  const [mobileView, setMobileView] = useState<'list' | 'detail'>('list')
+
+  const handleSelect = (ticker: string) => {
+    setSelectedTicker(ticker)
+    setMobileView('detail')
+  }
 
   useEffect(() => {
     setLoading(true)
@@ -56,11 +62,11 @@ export default function IndiaDashboard() {
       transition={{ duration: 0.4, ease: 'easeOut' }}
     >
       {/* Header */}
-      <header className="mb-6">
-        <h2 className="text-white text-2xl font-bold tracking-tight">
+      <header className="mb-4 md:mb-6">
+        <h2 className="text-white text-xl md:text-2xl font-bold tracking-tight">
           India Stocks · Nifty 50
         </h2>
-        <p className="text-zinc-500 text-sm mt-1">
+        <p className="text-zinc-500 text-xs md:text-sm mt-1">
           BUY/HOLD/SELL signals · 8 strategy algorithms · Updated 3× daily
         </p>
         {latestDate && (
@@ -80,21 +86,25 @@ export default function IndiaDashboard() {
       )}
 
       {/* Main layout: sidebar + detail */}
-      <div className="flex gap-4 mt-4 items-start">
-        {/* Sidebar */}
-        <IndiaStockSidebar
-          stocks={stocks}
-          selectedTicker={selectedTicker}
-          onSelect={setSelectedTicker}
-          loading={loading}
-        />
+      <div className="flex flex-col md:flex-row gap-4 mt-4 md:items-start">
+        {/* Sidebar — hidden on mobile when detail is active */}
+        <div className={mobileView === 'detail' ? 'hidden md:block' : 'block'}>
+          <IndiaStockSidebar
+            stocks={stocks}
+            selectedTicker={selectedTicker}
+            onSelect={handleSelect}
+            loading={loading}
+          />
+        </div>
 
-        {/* Detail panel */}
-        {selectedTicker ? (
-          <IndiaStockDetail ticker={selectedTicker} />
-        ) : (
-          <EmptyState />
-        )}
+        {/* Detail panel — hidden on mobile when list is active */}
+        <div className={`flex-1 min-w-0 ${mobileView === 'list' ? 'hidden md:flex md:flex-col' : 'flex flex-col'}`}>
+          {selectedTicker ? (
+            <IndiaStockDetail ticker={selectedTicker} onClose={() => setMobileView('list')} />
+          ) : (
+            <EmptyState />
+          )}
+        </div>
       </div>
 
       {/* Playbook banner */}

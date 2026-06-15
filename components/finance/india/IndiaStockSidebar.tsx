@@ -1,7 +1,10 @@
 "use client"
 
+import { useState } from 'react'
 import type { IndiaStockWithSignal } from '@/app/data/types/indiaFinance'
 import SignalBadge from './SignalBadge'
+
+type SignalFilter = 'ALL' | 'BUY' | 'HOLD' | 'SELL'
 
 interface IndiaStockSidebarProps {
   stocks: IndiaStockWithSignal[]
@@ -23,30 +26,103 @@ function SkeletonRows() {
   )
 }
 
+const filterStyles: Record<SignalFilter, string> = {
+  ALL:  'text-zinc-300 border-zinc-600 bg-zinc-800',
+  BUY:  'text-green-400 border-green-500/40 bg-green-500/10',
+  HOLD: 'text-zinc-400 border-zinc-500/40 bg-zinc-500/10',
+  SELL: 'text-red-400  border-red-500/40  bg-red-500/10',
+}
+
+const filterInactive = 'text-zinc-600 border-transparent bg-transparent hover:text-zinc-400'
+
 export default function IndiaStockSidebar({
   stocks,
   selectedTicker,
   onSelect,
   loading,
 }: IndiaStockSidebarProps) {
+  const [filter, setFilter] = useState<SignalFilter>('ALL')
+  const [search, setSearch] = useState('')
+
+  const filteredStocks = stocks
+    .filter((item) => filter === 'ALL' || item.latestSignal?.signal === filter)
+    .filter((item) => {
+      if (!search.trim()) return true
+      const q = search.toLowerCase()
+      return (
+        item.stock.ticker.toLowerCase().includes(q) ||
+        item.stock.name.toLowerCase().includes(q)
+      )
+    })
+
   return (
-    <div className="w-72 flex-shrink-0 bg-[#111] rounded-xl border border-zinc-800 overflow-hidden flex flex-col">
+    <div className="w-full md:w-72 flex-shrink-0 bg-[#111] rounded-xl border border-zinc-800 overflow-hidden flex flex-col h-[calc(100vh-180px)] md:sticky md:top-4 md:h-[calc(100vh-200px)]">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-zinc-800">
+      <div className="px-4 py-3 border-b border-zinc-800 flex-shrink-0">
         <p className="text-zinc-500 text-xs font-semibold tracking-widest uppercase">
           NIFTY 50
         </p>
         {!loading && (
-          <p className="text-zinc-600 text-[10px] mt-0.5">{stocks.length} stocks</p>
+          <p className="text-zinc-600 text-[10px] mt-0.5">{filteredStocks.length} stocks</p>
         )}
+
+        {/* Signal filter pills */}
+        <div className="flex gap-1.5 mt-2.5">
+          {(['ALL', 'BUY', 'HOLD', 'SELL'] as SignalFilter[]).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border transition-all ${
+                filter === f ? filterStyles[f] : filterInactive
+              }`}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+
+        {/* Search */}
+        <div className="mt-2.5 relative">
+          <svg
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-zinc-500 pointer-events-none"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.5}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+          </svg>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search ticker or name…"
+            className="w-full bg-zinc-900 border border-zinc-700/60 rounded-lg pl-7 pr-6 py-1.5 text-xs text-zinc-300 placeholder:text-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors"
+          />
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors text-[10px] leading-none"
+            >
+              ✕
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Stock list */}
       <div className="overflow-y-auto flex-1">
         {loading ? (
           <SkeletonRows />
+        ) : filteredStocks.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full py-12 px-4 text-center">
+            <p className="text-zinc-500 text-sm">No stocks found</p>
+            <p className="text-zinc-600 text-xs mt-1">
+              {search ? 'Try a different search term' : 'No stocks match this filter'}
+            </p>
+          </div>
         ) : (
-          stocks.map((item, index) => {
+          filteredStocks.map((item, index) => {
             const { stock, latestSignal, sevenDayChange } = item
             const isSelected = selectedTicker === stock.ticker
             const isTopPick = index < 3

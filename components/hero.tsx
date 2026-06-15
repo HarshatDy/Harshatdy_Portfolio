@@ -63,8 +63,8 @@ export default function Hero() {
             }}
           >
             <a
-              href="/cv.pdf"
-              download="Harshat_Dy_CV.pdf"
+              href="https://drive.google.com/file/d/1cysR9dfAuNxVt2RR0138zzmn70djQr39/view?usp=sharing"
+              download="Harshat_Dhanayat_CV.pdf"
               className="group relative flex items-center text-7xl font-bold text-[#FF8000] md:text-8xl lg:text-9xl"
               aria-label="Download CV"
             >

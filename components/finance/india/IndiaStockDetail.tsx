@@ -125,7 +125,20 @@ export default function IndiaStockDetail({ ticker, onClose }: IndiaStockDetailPr
 
   return (
     <div className="flex-1 min-w-0 bg-[#111] rounded-xl border border-zinc-800 overflow-y-auto">
-      <div className="p-6 flex flex-col gap-6">
+      <div className="p-4 md:p-6 flex flex-col gap-6">
+
+        {/* ── BACK BUTTON (mobile only) ── */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="md:hidden flex items-center gap-1.5 text-zinc-400 hover:text-white text-sm transition-colors -mb-2"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            All stocks
+          </button>
+        )}
 
         {/* ── HEADER ── */}
         <div className="flex items-start justify-between gap-4">
@@ -357,7 +370,7 @@ function StrategySignalsPanel({ signals }: { signals: StrategySignals }) {
         Strategy Signals
       </p>
       <p className="text-zinc-600 text-[10px] mb-3">Tap a card to see the KPIs used</p>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {keys.map((key) => (
           <StrategyCard key={key} label={STRATEGY_LABELS[key]} entry={signals[key]} />
         ))}
